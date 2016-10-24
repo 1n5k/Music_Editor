@@ -1,0 +1,21 @@
+<FelicaData>
+  <Header>
+    <Title>Test Data</Title>
+    <Subtitle>Input Test</Subtitle>
+    <Date>2015/9/13</Date>
+  </Header>
+  <Models>
+    <Model id="00" >012E34E7C00D7D58</Model>
+    <Model id="01" >012E34E7C00D7C42</Model>
+    <Model id="02" >012E34E7C00D7D27</Model>
+    <Model id="03" >012E34E7C00D7DB1</Model>
+    <Model id="04" >012E34E7C00D7AAB</Model>
+  </Models>
+  <Actions>
+    <Action id="00" >012E34E7C00D7BAD</Action>
+    <Action id="01" >012E34E7C00D7E83</Action>
+    <Action id="02" >012E34E7C00D7D1D</Action>
+    <Action id="03" >012E34E7C00D88BA</Action>
+    <Action id="04" >012E34E7C00D7E3A</Action>
+  </Actions>
+</FelicaData>
