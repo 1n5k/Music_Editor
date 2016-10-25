@@ -9,8 +9,15 @@ using System.Text;
 using System.IO;
 using UnityEngine.UI;
 
+/*public class XMLLoader : MonoBehaviour {
+    MusicData loadxml;
+    void Start(){
+        loadxml = GetComponent<MusicData>();
+        Debug.Log(loadxml);
+    }
+}*/
 public class XMLWriter : MonoBehaviour {
-    string EditFile;
+/*    string EditFile;
     public Text XMLData;
     public Text OpenFile;
     // Use this for initialization
@@ -82,5 +89,5 @@ public class XMLWriter : MonoBehaviour {
                 xmlReader.Close();
             }
         }
-    }
+    }*/
 }
