@@ -31,9 +31,18 @@ public class Notescreate : MonoBehaviour {
     private int max = 0;                                //最大小節が増えた際のトリガー
     private int[] risum = { 4, 8, 12, 16, 24, 32, 48 }; //分数の値
     private int input;                                  //キー入力の値
+    public static int mag = 1;                          //ノーツの幅
+    private int stoptime;
+    private int BPM;                  //xmlデータから読み込み引っ張ってくる
+    private int changeBPM;
     private int magsize;                                //レーン横幅の上限を越えないための天井値
     public float mymove;                                //0～-480(1小節の移動幅)
-    public static int mag = 1;                          //ノーツの幅
+
+    //ロングノーツ用の格納
+    private int longtap = -1;
+    private int starthaku = 0;
+    private int updown = 0;
+
     RectTransform Size;                                    //ノーツのサイズデータ格納先
     private Vector2 v;                                  //サイズデータ格納
     private Vector2 WH;                              //変化後の横幅
@@ -53,12 +62,8 @@ public class Notescreate : MonoBehaviour {
     private int Beat = 0;
     private int haku = 0;
     private int hakucount = 0;
-    private int BPM = 0;                  //xmlデータから読み込み引っ張ってくる
 
     string print_array = "";
-    private int longtap = -1;
-    private int starthaku = 0;
-    private int updown = 0;
 
     void Start()
     {
@@ -67,6 +72,11 @@ public class Notescreate : MonoBehaviour {
         v = Size.sizeDelta;
         WH = v;
         LongWH = v;
+
+        stoptime = 0;
+
+        BPM = 220; //xmlデータから読み込み引っ張ってくる
+        changeBPM = BPM;
 
         //0小節
         measure.Add(0);
@@ -84,7 +94,7 @@ public class Notescreate : MonoBehaviour {
         if(max < maxcc)
         {
             Beat = 0;
-            measure.Add(48/*risum[bunsu]*/);
+            measure.Add(48);
             for(int a = 0;a <= maxcc; a++)
             {
                 Beat += measure[a];
@@ -155,7 +165,7 @@ public class Notescreate : MonoBehaviour {
         magsize = 0;
 
         //ノーツの幅変更
-        if(Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             mag--;
             if (mag < 1)
@@ -168,13 +178,72 @@ public class Notescreate : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.W))
         {
             mag++;
-            if(mag > 12)
+            if (mag > 12)
             {
                 mag = 12;
             }
             WH.x = v.x * mag;
             LongWH.x = v.x * mag;
         }
+        /*
+        //停止時間
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            stoptime -= -1;
+            if(stoptime == 0)
+            {
+                capsel.OPTION[0] = 0;
+                capsel.OPTION[1] = 0;
+                capsel.OPTION[2] = 0;
+            }
+            else
+            {
+
+            }
+            
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+
+        }
+
+        //BPMの幅変更
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            changeBPM -= 10;
+            if (changeBPM < 10)
+            {
+                changeBPM = 10;
+            }
+
+            if(changeBPM == BPM)
+            {
+                capsel.OPTION[0] = 0;
+                capsel.OPTION[1] = 0;
+            }
+            else
+            {
+                capsel.OPTION[0] = 2;
+                capsel.OPTION[1] = changeBPM;
+            }
+
+
+        }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            BPM += 10;
+            if (changeBPM == BPM)
+            {
+                capsel.OPTION[0] = 0;
+                capsel.OPTION[1] = 0;
+            }
+            else
+            {
+                capsel.OPTION[0] = 2;
+                capsel.OPTION[1] = changeBPM;
+            }
+        }*/
+
         //入力を数値化
         if (Input.GetKeyDown(KeyCode.A))//左から1番目
         {
@@ -313,14 +382,11 @@ public class Notescreate : MonoBehaviour {
             longcopy = (RectTransform)Instantiate(LongNotes, new Vector3(298 - (54 * input), (cc * -480) + 366 + mymove, 0), Quaternion.identity);
             longcopy.sizeDelta = LongWH;
             longcopy.transform.SetParent(Parent, false);
+            LongStock.NOTES = capsel.NOTES;
 
+            Debug.Log("start" + starthaku);
             LongStock.NOTES[longtap, 0] = 2;
-            capsel.NOTES[longtap, 0] = LongStock.NOTES[longtap, 0];
-            LongStock = new NotesStore();
             LongStock.NOTES[longtap, 1] = mag;
-            capsel.NOTES[longtap, 1] = LongStock.NOTES[longtap, 1];
-            LongStock = new NotesStore();
-
             input = -1;
         }
         if(longtap >= 0 && Input.GetKey(KeyCode.LeftShift))
@@ -334,10 +400,6 @@ public class Notescreate : MonoBehaviour {
             {
                 updown--;
             }
-            if(updown < 0)
-            {
-                longtap = -1;
-            }
         }
         if (longtap >= 0 && Input.GetKeyUp(KeyCode.LeftShift))
         {
@@ -347,20 +409,18 @@ public class Notescreate : MonoBehaviour {
                 copyDes.transform.SetParent(Parent, false);
                 for (int d = 0; d < 5; d++)
                 {
-                    list[starthaku].NOTES[longtap, d] = 0;
+                    LongStock.NOTES[longtap, d] = 0;
+                    list[starthaku].NOTES = LongStock.NOTES;
                 }
             }
             else
             {
-                LongWH.y = updown * 491 / risum[bunsu];
+                LongWH.y = v.y +(updown * 490 / risum[bunsu]);
                 longcopy.sizeDelta = LongWH;
 
                 LongStock.NOTES[longtap, 3] = risum[bunsu];
-                list[starthaku].NOTES[longtap, 3] = LongStock.NOTES[longtap, 3];
-                LongStock = new NotesStore();
                 LongStock.NOTES[longtap, 4] = updown;
-                list[starthaku].NOTES[longtap, 4] = LongStock.NOTES[longtap, 4];
-                LongStock = new NotesStore();
+                list[starthaku].NOTES = LongStock.NOTES;
             }
             longtap = -1;
             input = -1;
@@ -384,14 +444,14 @@ public class Notescreate : MonoBehaviour {
         //出力チェック&セーブ機能
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            list[haku] = capsel;
-            for(int me = 0;me < maxcc; me++)
+            list[haku] = capsel;        
+            for (int me = 0;me < maxcc; me++)
             {
                 for (int h = 0; h < 48; h++)
                 {
                     for (int k = 0; k < 3; k++)
                     {
-                        print_array += list[h * maxcc].OPTION[k].ToString();
+                        print_array += list[h + (48 * me)].OPTION[k].ToString();
                         if (k < 2) { print_array += ","; }
                     }
                     print_array += "|";
@@ -399,7 +459,7 @@ public class Notescreate : MonoBehaviour {
                     {
                         for (int j = 0; j < 5; j++)
                         {
-                            print_array += list[h * maxcc].NOTES[i, j].ToString();
+                            print_array += list[h + (48 * me)].NOTES[i, j].ToString();
                             if (j < 4) { print_array += ","; }
                         }
                         print_array += "|";

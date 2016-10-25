@@ -4,17 +4,23 @@ using System.Collections;
 
 public class Widthdisplay : MonoBehaviour {
     private int Width;
-    private GameObject text;
-    private string dis = "Q↓ ";
-	// Use this for initialization
+    private int bunsu;
+    private int [] risum = { 4, 8, 12, 16, 24, 32, 48 };
+    private GameObject width;
+    private GameObject stoptime;
+    private GameObject changeBPM;
+
 	void Start () {
-        text = GameObject.Find("Widthdisplay");
+        width = GameObject.Find("Widthdisplay");
+        stoptime = GameObject.Find("StopSpeed");
+        changeBPM = GameObject.Find("ChangeSpeed");
     }
 
     void Update () {
         Width = Notescreate.getmag();
-        dis = Width.ToString();
-        text.GetComponent<Text>().text = "ノーツの幅:Q↓ " + dis +" ↑W";
-
+        bunsu = Keyscroll.geti();
+        width.GetComponent<Text>().text = "ノーツの幅:Q↓" + Width +"↑W";
+        stoptime.GetComponent<Text>().text = " 停止時間:" + risum[bunsu] + "分 ×" + " E↓" + 0 + "拍 ↑R ";
+        changeBPM.GetComponent<Text>().text = " 変速: BPM T↓" + 220 + "↑Y";
     }
 }

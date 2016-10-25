@@ -53,7 +53,7 @@ public class Keyscroll : MonoBehaviour {
 
 
         //刻みを管理
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && Input.GetKey(KeyCode.RightShift) != true && Input.GetKey(KeyCode.LeftShift) != true)
         {
 
             //小節線以外で押したとき前の小節線に戻す
@@ -105,7 +105,7 @@ public class Keyscroll : MonoBehaviour {
         fullC = 0;
 
         //刻みを管理
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow) && Input.GetKey(KeyCode.RightShift) != true && Input.GetKey(KeyCode.LeftShift) != true)
         {
 
             //小節線以外で押したとき前の小節線に戻す
