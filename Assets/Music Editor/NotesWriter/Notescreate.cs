@@ -43,6 +43,7 @@ public class Notescreate : MonoBehaviour {
     RectTransform copy;
     RectTransform longcopy;
     GameObject copyDes;
+    public Boolean yes = false;
     //List構造体
     public List<NotesStore> list = new List<NotesStore>();
     public NotesStore capsel = new NotesStore();
@@ -55,7 +56,8 @@ public class Notescreate : MonoBehaviour {
     private int hakucount = 0;
     private int BPM = 0;                  //xmlデータから読み込み引っ張ってくる
 
-    string print_array = "";
+    public string print_array = "";
+    public XMLWriter writer = new XMLWriter();
     private int longtap = -1;
     private int starthaku = 0;
     private int updown = 0;
@@ -79,9 +81,10 @@ public class Notescreate : MonoBehaviour {
         cc = Keyscroll.getcc(); //現在いる小節
         maxcc = Keyscroll.getmaxcc(); //最大小節
         Debug.Log(mymove);
+        
 
         //新しい小節の長さ決めと初期化
-        if(max < maxcc)
+        if (max < maxcc)
         {
             Beat = 0;
             measure.Add(48/*risum[bunsu]*/);
@@ -408,11 +411,23 @@ public class Notescreate : MonoBehaviour {
                     else { print_array += "@;\n"; }
                 }
             }
-
-            Debug.Log(print_array);
-            print_array = "";
+            
+           // finalle();
+            //XMLWriter writer = GetComponent<XMLWriter>();
+            if (writer!=null)
+            {
+                yes = writer.Write(ref print_array);
+                Debug.Log(yes);
+                print_array = "";
+            }
+            else
+            {
+                Debug.Log(writer);
+                Debug.Log("writer is NULL");
+            }
         }
     }
+
     
     public static int getmag()
     {

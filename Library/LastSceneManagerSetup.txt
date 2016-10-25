@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Xml Editor/WritingXml/XMLWriting.unity
+- path: Assets/Music Editor/MusicEditor.unity
   isLoaded: 1
   isActive: 1

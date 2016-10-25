@@ -9,7 +9,7 @@ using System.Text;
 using System.IO;
 using UnityEngine.UI;
 
-/*public class MusicData
+class MusicData
 {
     public string Title;
     public string Subtitle;
@@ -23,35 +23,24 @@ using UnityEngine.UI;
     public double SelectOffset;
     public double Selectlong;
     public string[] Notes = new string[4];
-};*/
-public class EditXml : MonoBehaviour
+};
+public class XMLLoader : MonoBehaviour
 {
 
-    /*string EditFile;
+    string EditFile;
 
-       public Text XMLData;
-       public Text OpenFile;
+    public Text XMLData;
+    //public Text OpenFile;
 
-       public Text TITLEBOX;
-       public Text SUBTITLEBOX;
-       public Text ARTISTBOX;
-       public Text BPMBOX;
-       public Text MUSICBOX;
-       public Text JACKETBOX;
-       public Text DIFFICULTYBOX;
-       public Text MOVIEBOX;
-       public Text OFFSETBOX;
-       public Text SELECTOFFSETBOX;
-       public Text SELECTLONGBOX;
-       public Text NOTESBOX;
-       static Boolean DifficultyChecker = false;
-       static Boolean NotesChecker = false;
-       static MusicData LoadedData;
-
+    static Boolean DifficultyChecker = false;
+    static Boolean NotesChecker = false;
+    static MusicData LoadedData;
     // Use this for initialization
+
+    
     public void OpenXml()
     {
-        EditFile = OpenFile.text;
+        EditFile = @"D:\Music_Editor\NightOfKnights.xml";//OpenFile.text;
         FileStream fs = null;
         XmlReader xmlReader = null;
         XmlReaderSettings settings = null;
@@ -59,7 +48,7 @@ public class EditXml : MonoBehaviour
         LoadedData = new MusicData();
         try
         {
-            XMLData.text += EditFile + "を読み込みます\r\n";
+            //XMLData.text += EditFile + "を読み込みます\r\n";
             fs = new FileStream(EditFile, FileMode.Open);
 
             settings = new XmlReaderSettings();
@@ -75,20 +64,23 @@ public class EditXml : MonoBehaviour
                 Debug.Log("LocalName: " + xmlReader.LocalName + "\r\n");
                 Debug.Log("Depth: " + Convert.ToString(xmlReader.Depth) + "\r\n");
                 Debug.Log("Name: " + xmlReader.Name + "\r\n");
-                if(xmlReader.Name != "" && xmlReader != null && nType == XmlNodeType.Element)
+                if (xmlReader.Name != "" && xmlReader != null && nType == XmlNodeType.Element)
                 {
                     Listener = xmlReader.Name;
-                    if(Listener == "DIFFICULTY")
+                    if (Listener == "DIFFICULTY")
                     {
                         DifficultyChecker = true;
-                    }else if(Listener == "NOTES")
+                    }
+                    else if (Listener == "NOTES")
                     {
                         NotesChecker = true;
                     }
-                }else if(xmlReader.Name == "DIFFICULTY" && nType == XmlNodeType.EndElement)
+                }
+                else if (xmlReader.Name == "DIFFICULTY" && nType == XmlNodeType.EndElement)
                 {
                     DifficultyChecker = false;
-                }else if(xmlReader.Name == "NOTES" && nType == XmlNodeType.EndElement)
+                }
+                else if (xmlReader.Name == "NOTES" && nType == XmlNodeType.EndElement)
                 {
                     NotesChecker = false;
                 }
@@ -123,11 +115,10 @@ public class EditXml : MonoBehaviour
         }
         catch (Exception exc)
         {
-            XMLData.text += "Error: " + exc.Message;
+            Debug.Log(@"Error: " + exc.Message);
         }
         finally
         {
-            SetValueToBox();
             if (fs != null)
             {
                 fs.Close();
@@ -136,9 +127,14 @@ public class EditXml : MonoBehaviour
             {
                 xmlReader.Close();
             }
+            SendToGlobalValue(LoadedData);
         }
     }
 
+    void Start()
+    {
+        OpenXml();
+    }
     //タグを発見したときに判別を行う
     void CheckNodeData(string checkdata, string datavalue)
     {
@@ -221,50 +217,20 @@ public class EditXml : MonoBehaviour
             }
         }
     }
-    void SetValueToBox()
+    void SendToGlobalValue(MusicData Sender)
     {
-        TITLEBOX.text = LoadedData.Title;
-        SUBTITLEBOX.text = LoadedData.Subtitle;
-        ARTISTBOX.text = LoadedData.Artist;
-        BPMBOX.text = LoadedData.Bpm.ToString();
-        MUSICBOX.text = LoadedData.MusicAddress;
-        DIFFICULTYBOX.text = LoadedData.Difficulty[3].ToString();
-        MOVIEBOX.text = LoadedData.MovieAddress;
-        OFFSETBOX.text = LoadedData.Offset.ToString();
-        SELECTOFFSETBOX.text = LoadedData.SelectOffset.ToString();
-        SELECTLONGBOX.text = LoadedData.Selectlong.ToString();
-        NOTESBOX.text = LoadedData.Notes[3].ToString();
+       /* MusicData buff = GameObject.Find("GlobalValueControl").GetComponent<GlobalValue>().MusicParam;
+        buff.Title = LoadedData.Title;
+        buff.Subtitle = LoadedData.Subtitle;
+        buff.Artist = LoadedData.Artist;
+        buff.Bpm = LoadedData.Bpm;
+        buff.Jackect = LoadedData.Jackect;
+        buff.MusicAddress = LoadedData.MusicAddress;
+        buff.MovieAddress = LoadedData.MovieAddress;
+        buff.Difficulty = LoadedData.Difficulty;
+        buff.Offset = LoadedData.Offset;
+        buff.SelectOffset = LoadedData.SelectOffset;
+        buff.Selectlong = LoadedData.Selectlong;
+        buff.Notes = LoadedData.Notes;*/
     }
-    public void XmlEditor()
-    {
-        EditFile = OpenFile.text;
-        FileStream fs = null;
-        XmlWriter xmlWriter = null;
-        XmlWriterSettings settings = null;
-
-        try
-        {
-            XMLData.text += EditFile + "を読み込みます\r\n";
-            fs = new FileStream("C: \\Users\\Ryuta\\Documents\\XML Edit Test\\Assets\\" + EditFile, FileMode.Create, FileAccess.Write);
-
-            settings = new XmlWriterSettings();
-
-            xmlWriter = XmlWriter.Create(fs, settings);
-        }
-        catch (Exception exc)
-        {
-            XMLData.text += "Error: " + exc.Message;
-        }
-        finally
-        {
-            if (fs != null)
-            {
-                fs.Close();
-            }
-            if (xmlWriter != null)
-            {
-                xmlWriter.Close();
-            }
-        }
-    }*/
 }
