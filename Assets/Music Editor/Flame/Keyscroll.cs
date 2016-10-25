@@ -53,7 +53,7 @@ public class Keyscroll : MonoBehaviour {
 
 
         //刻みを管理
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && Input.GetKey(KeyCode.RightShift) != true && Input.GetKey(KeyCode.LeftShift) != true)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && Input.GetKey(KeyCode.RightShift) != true && Input.GetKey(KeyCode.LeftShift) != true && Input.GetKey(KeyCode.Space) != true)
         {
 
             //小節線以外で押したとき前の小節線に戻す
@@ -105,7 +105,7 @@ public class Keyscroll : MonoBehaviour {
         fullC = 0;
 
         //刻みを管理
-        if (Input.GetKeyDown(KeyCode.RightArrow) && Input.GetKey(KeyCode.RightShift) != true && Input.GetKey(KeyCode.LeftShift) != true)
+        if (Input.GetKeyDown(KeyCode.RightArrow) && Input.GetKey(KeyCode.RightShift) != true && Input.GetKey(KeyCode.LeftShift) != true && Input.GetKey(KeyCode.Space) != true)
         {
 
             //小節線以外で押したとき前の小節線に戻す
@@ -151,7 +151,7 @@ public class Keyscroll : MonoBehaviour {
             one = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow) && Input.GetKey(KeyCode.Space) != true)
         {
             c = risum[i];
             count += 1/c;
@@ -160,20 +160,20 @@ public class Keyscroll : MonoBehaviour {
             transform.position = v;
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.DownArrow) && Input.GetKey(KeyCode.Space) != true)
         {
-            c = risum[i];
-            count -= 1/c;
-            v.y -= Ymove / risum[i];
-            if(Ysum == 0)
-            {
-                Ysum += Ymove - Ymove / risum[i];
-            }
-            else
-            {
-                Ysum -= Ymove / risum[i];
-            }
-            transform.position = v;
+                c = risum[i];
+                count -= 1 / c;
+                v.y -= Ymove / risum[i];
+                if (Ysum == 0)
+                {
+                    Ysum += Ymove - Ymove / risum[i];
+                }
+                else
+                {
+                    Ysum -= Ymove / risum[i];
+                }
+                transform.position = v;
         }
 
         if (count == 0 && cc == 0)
