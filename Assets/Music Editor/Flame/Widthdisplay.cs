@@ -17,7 +17,7 @@ public class Widthdisplay : MonoBehaviour {
 
 	void Start () {
         width = GameObject.Find("Widthdisplay");
-        stoptime = GameObject.Find("StopSpeed");
+      //  stoptime = GameObject.Find("StopSpeed");
 
     }
 
@@ -25,6 +25,6 @@ public class Widthdisplay : MonoBehaviour {
         Width = Notescreate.getmag();
         bunsu = Keyscroll.geti();
         width.GetComponent<Text>().text = "ノーツの幅:Q↓" + Width +"↑W";
-        stoptime.GetComponent<Text>().text = " 停止時間:" + risum[bunsu] + "分 ×" + " E↓" + 0 + "拍 ↑R ";
+       // stoptime.GetComponent<Text>().text = " 停止時間:" + risum[bunsu] + "分 ×" + " E↓" + 0 + "拍 ↑R ";
     }
 }

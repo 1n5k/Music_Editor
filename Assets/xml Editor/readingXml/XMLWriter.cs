@@ -18,7 +18,7 @@ using UnityEditor;
         Debug.Log(loadxml);
     }
 }*/
-public class XMLWriter{
+public class XMLWrite{
     public Boolean Write(ref string score)
     {
         String scores = "score.xml";

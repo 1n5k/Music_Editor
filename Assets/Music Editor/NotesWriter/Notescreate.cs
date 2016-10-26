@@ -10,6 +10,7 @@ using System.IO;
 using UnityEngine.UI;
 
 
+
 public class NotesStore{
 
     public int[,] NOTES = new int[12, 5];
@@ -80,7 +81,7 @@ public class Notescreate : MonoBehaviour {
     private int hakucount = 0;
 
     public string print_array = "";
-    public XMLWriter writer = new XMLWriter();
+    public XMLWrite writer = new XMLWrite();
 
     void Start()
     {
