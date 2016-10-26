@@ -73,7 +73,8 @@
     <Compile Include="Assets\Music Editor\NotesWriter\SlideCreate.cs" />
     <Compile Include="Assets\XMLLoader.cs" />
     <Compile Include="Assets\Xml Editor\WritingXml\EditXml.cs" />
-    <Compile Include="Assets\Xml Editor\readingXml\XMLWriter.cs" />
+    <Compile Include="Assets\Xml Editor\readingXml\XMLWrite.cs" />
+    <Compile Include="Assets\Yume.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Xml Editor\readingXml\sampledata.xml" />

@@ -29,7 +29,7 @@ public class XMLLoader : MonoBehaviour
 
     string EditFile;
 
-    public Text XMLData;
+    public Text XMLData ;
     //public Text OpenFile;
 
     static Boolean DifficultyChecker = false;
@@ -48,7 +48,7 @@ public class XMLLoader : MonoBehaviour
         LoadedData = new MusicData();
         try
         {
-            //XMLData.text += EditFile + "を読み込みます\r\n";
+            Debug.Log(EditFile + "を読み込みます\r\n");
             fs = new FileStream(EditFile, FileMode.Open);
 
             settings = new XmlReaderSettings();
@@ -60,9 +60,9 @@ public class XMLLoader : MonoBehaviour
             while (xmlReader.Read() == true)
             {
                 XmlNodeType nType = xmlReader.NodeType;
-                Debug.Log("NodeType: " + nType.ToString() + "\r\n");
+                //Debug.Log("NodeType: " + nType.ToString() + "\r\n");
                 Debug.Log("LocalName: " + xmlReader.LocalName + "\r\n");
-                Debug.Log("Depth: " + Convert.ToString(xmlReader.Depth) + "\r\n");
+                //Debug.Log("Depth: " + Convert.ToString(xmlReader.Depth) + "\r\n");
                 Debug.Log("Name: " + xmlReader.Name + "\r\n");
                 if (xmlReader.Name != "" && xmlReader != null && nType == XmlNodeType.Element)
                 {
@@ -88,7 +88,7 @@ public class XMLLoader : MonoBehaviour
                 if (xmlReader.HasValue == true)
                 {
                     Type valueType = xmlReader.ValueType;
-                    Debug.Log("ValueType: " + valueType.ToString() + "\r\n");
+                    //Debug.Log("ValueType: " + valueType.ToString() + "\r\n");
                     Debug.Log("Value: " + xmlReader.Value + "\r\n");
                     CheckNodeData(Listener, xmlReader.Value);
                 }
@@ -115,7 +115,7 @@ public class XMLLoader : MonoBehaviour
         }
         catch (Exception exc)
         {
-            Debug.Log(@"Error: " + exc.Message);
+            Debug.Log(@"Error: "+exc.Message);
         }
         finally
         {
@@ -127,16 +127,16 @@ public class XMLLoader : MonoBehaviour
             {
                 xmlReader.Close();
             }
-            SendToGlobalValue(LoadedData);
+            //SendToGlobalValue(LoadedData);
         }
     }
 
-    void Start()
+    public void Update()
     {
-        OpenXml();
+        
     }
     //タグを発見したときに判別を行う
-    void CheckNodeData(string checkdata, string datavalue)
+    public void CheckNodeData(string checkdata, string datavalue)
     {
         if (checkdata == "TITLE")
         {
@@ -217,7 +217,7 @@ public class XMLLoader : MonoBehaviour
             }
         }
     }
-    void SendToGlobalValue(MusicData Sender)
+    /*public void SendToGlobalValue(MusicData Sender)
     {
        /* MusicData buff = GameObject.Find("GlobalValueControl").GetComponent<GlobalValue>().MusicParam;
         buff.Title = LoadedData.Title;
@@ -231,6 +231,6 @@ public class XMLLoader : MonoBehaviour
         buff.Offset = LoadedData.Offset;
         buff.SelectOffset = LoadedData.SelectOffset;
         buff.Selectlong = LoadedData.Selectlong;
-        buff.Notes = LoadedData.Notes;*/
-    }
+        buff.Notes = LoadedData.Notes;
+    }*/
 }
