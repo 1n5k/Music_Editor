@@ -4,6 +4,7 @@ using System.Collections;
 public class SlideCreate : MonoBehaviour
 {
     //これ全部コピペ
+    private float mag = 0;
     Mesh _mesh;
     private MeshFilter _meshFilter;
     private Vector3[] _newVertices;
@@ -14,17 +15,18 @@ public class SlideCreate : MonoBehaviour
         _meshFilter = GetComponent<MeshFilter>();
     }
 
-    void Start()
+    public void Slider(float x,float y)
     {
+        mag = Notescreate.getmag();
         _mesh = new Mesh();
         _newVertices = new Vector3[4];
         Vector2[] _newUV = new Vector2[4];
 
         //Set vertices
-        _newVertices[0] = new Vector3(0, 0, 0);
-        _newVertices[1] = new Vector3(1, 0, 0);
-        _newVertices[2] = new Vector3(0, 2, 0);
-        _newVertices[3] = new Vector3(1, 1, 0);
+        _newVertices[0] = new Vector3(0, 0);
+        _newVertices[1] = new Vector3(-54f * mag , 0);
+        _newVertices[2] = new Vector3(x, -y);
+        _newVertices[3] = new Vector3(x - (54f * mag), -y);
 
         //Set UV
         _newUV[0] = new Vector2(0, 0);
@@ -45,9 +47,6 @@ public class SlideCreate : MonoBehaviour
         _mesh.RecalculateNormals();
         _mesh.RecalculateBounds();
 
-        //MeshTopologyの確認
-        MeshTopology topo = _meshFilter.mesh.GetTopology(0);
-        Debug.Log(topo); // Quads と出力されるはず
     }
 
     int[] MakeIndices()

@@ -9,19 +9,22 @@ using System.IO;
 
 public class Widthdisplay : MonoBehaviour {
     private int Width;
-    private GameObject text;
-    private string dis = "Q↓ ";
-    MusicData title;
-    // Use this for initialization
-    void Start () {
-        text = GameObject.Find("Widthdisplay");
+    private int change;
+    private int bunsu;
+    private int [] risum = { 4, 8, 12, 16, 24, 32, 48 };
+    private GameObject width;
+    private GameObject stoptime;
+
+	void Start () {
+        width = GameObject.Find("Widthdisplay");
+        stoptime = GameObject.Find("StopSpeed");
 
     }
 
     void Update () {
         Width = Notescreate.getmag();
-        dis = Width.ToString();
-        text.GetComponent<Text>().text = "ノーツの幅:Q↓ " + dis +" ↑W";
-
+        bunsu = Keyscroll.geti();
+        width.GetComponent<Text>().text = "ノーツの幅:Q↓" + Width +"↑W";
+        stoptime.GetComponent<Text>().text = " 停止時間:" + risum[bunsu] + "分 ×" + " E↓" + 0 + "拍 ↑R ";
     }
 }
