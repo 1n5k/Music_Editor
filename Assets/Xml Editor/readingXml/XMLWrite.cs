@@ -35,9 +35,9 @@ public class XMLWrite{
             XmlWriter writer = XmlWriter.Create(path);
 
             writer.WriteRaw("<MusicData>\n");
-            writer.WriteRaw(" <NOTES>\n");
-            writer.WriteRaw("  " + score);
-            writer.WriteRaw(" </NOTES>\n");
+            writer.WriteRaw("<NOTES>\n");
+            writer.WriteRaw(score);
+            writer.WriteRaw("</NOTES>\n");
             writer.WriteRaw("<MusicData>\n");
 
             writer.Flush();
