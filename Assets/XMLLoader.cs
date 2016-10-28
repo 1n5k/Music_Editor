@@ -17,13 +17,14 @@ class MusicData
     public double Bpm;
     public string MusicAddress;
     public string Jackect;
-    public int[] Difficulty = new int[4];
+    public string[] Difficulty = new string[4];
     public string MovieAddress;
     public double Offset;
     public double SelectOffset;
     public double Selectlong;
     public string[] Notes = new string[4];
 };
+
 public class XMLLoader : MonoBehaviour
 {
 
@@ -36,11 +37,12 @@ public class XMLLoader : MonoBehaviour
     static Boolean NotesChecker = false;
     static MusicData LoadedData;
     // Use this for initialization
-
+    static string[] Opt = { "TITLE", "SUBTITLE", "ARTIST", "BPM", "JACKET", "MUSIC", "DIFFICULTY",
+                            "MOVIE", "OFFSET", "SELECTOFFSET", "SELECTLONG", "NOTES",  };
     
     public void OpenXml()
     {
-        EditFile = @"D:\Music_Editor\NightOfKnights.xml";//OpenFile.text;
+        EditFile = @"D:\Music_Editor\Score\NightOfKnights.xml";//OpenFile.text;
         FileStream fs = null;
         XmlReader xmlReader = null;
         XmlReaderSettings settings = null;
@@ -91,7 +93,11 @@ public class XMLLoader : MonoBehaviour
                     //Debug.Log("ValueType: " + valueType.ToString() + "\r\n");
                     Debug.Log("Value: " + xmlReader.Value + "\r\n");
                     CheckNodeData(Listener, xmlReader.Value);
+                    
                 }
+                
+
+                Debug.Log("殺す");
 
                 //属性がある場合
                 if (xmlReader.HasAttributes == true)
@@ -111,6 +117,14 @@ public class XMLLoader : MonoBehaviour
                 }
 
                 Debug.Log("\r\n");
+            }
+
+            for (int n=0;n < 4;n++){
+                Debug.Log("aaaaaaaa");
+                if (LoadedData.Notes[n] != null)
+                {
+                    Debug.Log("Notes found: "+n);
+                }
             }
         }
         catch (Exception exc)
@@ -166,19 +180,19 @@ public class XMLLoader : MonoBehaviour
         {
             if (checkdata == "EASY")
             {
-                LoadedData.Difficulty[0] = Convert.ToInt32(datavalue);
+                LoadedData.Difficulty[0] = Convert.ToString(datavalue);
             }
             else if (checkdata == "NORMAL")
             {
-                LoadedData.Difficulty[1] = Convert.ToInt32(datavalue);
+                LoadedData.Difficulty[1] = Convert.ToString(datavalue);
             }
             else if (checkdata == "HARD")
             {
-                LoadedData.Difficulty[2] = Convert.ToInt32(datavalue);
+                LoadedData.Difficulty[2] = Convert.ToString(datavalue);
             }
             else if (checkdata == "EXTRA")
             {
-                LoadedData.Difficulty[3] = Convert.ToInt32(datavalue);
+                LoadedData.Difficulty[3] = Convert.ToString(datavalue);
             }
         }
         else if (checkdata == "MOVIE")
