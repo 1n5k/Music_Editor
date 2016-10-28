@@ -71,12 +71,14 @@
     <Compile Include="Assets\Music Editor\NotesWriter\Destroy.cs" />
     <Compile Include="Assets\Music Editor\NotesWriter\Notescreate.cs" />
     <Compile Include="Assets\Music Editor\NotesWriter\SlideCreate.cs" />
+    <Compile Include="Assets\Music Editor\NotesWriter\XmlUtil.cs" />
     <Compile Include="Assets\XMLLoader.cs" />
     <Compile Include="Assets\Xml Editor\WritingXml\EditXml.cs" />
     <Compile Include="Assets\Xml Editor\readingXml\XMLWrite.cs" />
     <Compile Include="Assets\Yume.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\SerializeData.xml" />
     <None Include="Assets\Xml Editor\readingXml\sampledata.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />

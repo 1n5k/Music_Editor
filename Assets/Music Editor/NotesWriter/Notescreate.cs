@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using UnityEngine.UI;
+using System.Xml.Serialization;
 
 
 
@@ -91,6 +92,15 @@ public class Notescreate : MonoBehaviour {
     public string print_array = "";
     public XMLWrite writer = new XMLWrite();
 
+    [Serializable]
+    public struct Test
+    {
+        public string NOTES;
+    }
+    public Test test;
+    private string serializeDataPath;
+
+
     void Start()
     {
         //Notesのサイズデータ
@@ -106,6 +116,9 @@ public class Notescreate : MonoBehaviour {
 
         //0小節
         measure.Add(0);
+
+
+        serializeDataPath = Application.dataPath + "/SerializeData.xml";
     }
 
 
@@ -456,6 +469,10 @@ public class Notescreate : MonoBehaviour {
             }
         }//入力の数値化終了
 
+        if(risum[bunsu] == 32) //とりあえず32分のキャンセル
+        {
+            input = -1;
+        }
 
         //デストロイヤー君の移動
         if(input >= 0)
@@ -662,6 +679,7 @@ public class Notescreate : MonoBehaviour {
         //出力チェック&セーブ機能
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            print_array = "";
             list[haku] = capsel;        
             for (int me = 0;me < maxcc; me++)
             {
@@ -686,6 +704,7 @@ public class Notescreate : MonoBehaviour {
                     else { print_array += "@;\n"; }
                 }
             }
+
             
            // finalle();
             //XMLWriter writer = GetComponent<XMLWriter>();
@@ -700,6 +719,9 @@ public class Notescreate : MonoBehaviour {
                 Debug.Log(writer);
                 Debug.Log("writer is NULL");
             }
+            Debug.Log(print_array);
+            test.NOTES = print_array;
+            XmlUtil.Seialize<Test>(serializeDataPath, test);
         }
     }
 
