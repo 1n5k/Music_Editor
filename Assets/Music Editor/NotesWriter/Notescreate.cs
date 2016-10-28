@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using UnityEngine.UI;
+using System.Xml.Serialization;
 
 
 public class NotesStore{
@@ -89,6 +90,15 @@ public class Notescreate : MonoBehaviour {
     string print_array = "";
 
 
+    [Serializable]
+    public struct Test
+    {
+        public string NOTES;
+    }
+    public Test test;
+    private string serializeDataPath;
+
+
     void Start()
     {
         //Notesのサイズデータ
@@ -104,6 +114,9 @@ public class Notescreate : MonoBehaviour {
 
         //0小節
         measure.Add(0);
+
+
+        serializeDataPath = Application.dataPath + "/SerializeData.xml";
     }
 
 
@@ -453,6 +466,10 @@ public class Notescreate : MonoBehaviour {
             }
         }//入力の数値化終了
 
+        if(risum[bunsu] == 32) //とりあえず32分のキャンセル
+        {
+            input = -1;
+        }
 
         //デストロイヤー君の移動
         if(input >= 0)
@@ -659,6 +676,7 @@ public class Notescreate : MonoBehaviour {
         //出力チェック&セーブ機能
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            print_array = "";
             list[haku] = capsel;        
             for (int me = 0;me < maxcc; me++)
             {
@@ -685,7 +703,8 @@ public class Notescreate : MonoBehaviour {
             }
 
             Debug.Log(print_array);
-            print_array = "";
+            test.NOTES = print_array;
+            XmlUtil.Seialize<Test>(serializeDataPath, test);
         }
     }
 

@@ -120,7 +120,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -33, y: -0.00024414062}
+  m_AnchoredPosition: {x: -33, y: 450.56976}
   m_SizeDelta: {x: 761, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &118200853
@@ -725,7 +725,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 294646516}
   m_HandleRect: {fileID: 294646515}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1163,6 +1163,8 @@ MonoBehaviour:
   changeBPM: {fileID: 1847273903}
   mymove: 0
   measure: 
+  test:
+    NOTES: 
 --- !u!212 &935217712
 SpriteRenderer:
   m_ObjectHideFlags: 0
