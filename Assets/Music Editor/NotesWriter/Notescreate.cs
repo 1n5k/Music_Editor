@@ -27,6 +27,7 @@ public class Notescreate : MonoBehaviour {
     public Sprite Right;                                 //右フリック
     public RectTransform Parent;                        //親指定
     public GameObject Des;                              //デストロイヤー君
+    public RectTransform StopTime;                      //右に停止の値
     public RectTransform changeBPM;                        //左に変則の値を生成
     private int bunsu;                                  //左右の押された数(0～7)の格納先
     private int cc;                                     //現在の小節数
@@ -35,13 +36,16 @@ public class Notescreate : MonoBehaviour {
     private int[] risum = { 4, 8, 12, 16, 24, 32, 48 }; //分数の値
     private int input;                                  //キー入力の値
 
-    private int optiontap = 0;
-    private int changetap = 0;
-    private int stoptap = 0;
+    private int optiontap = -1;
+    private int changetap = -1;
+    private int stoptap = -1;
 
     public static int mag = 1;                          //ノーツの幅
     private int stoptime;
+    private int updownstop = 0;
     private int startBPM = 0;                             //xmlデータから読み込み引っ張ってくる
+    private int change;
+    private int updownBPM = 0;
     private int magsize;                                //レーン横幅の上限を越えないための天井値
 
     public float mymove;                                //0～-480(1小節の移動幅)
@@ -68,6 +72,7 @@ public class Notescreate : MonoBehaviour {
     RectTransform longcopy;
     RectTransform slidecopy;
     RectTransform flickcopy;
+    RectTransform stopcopy;
     RectTransform changecopy;
     GameObject copyDes;
     public Boolean yes = false;
@@ -97,6 +102,7 @@ public class Notescreate : MonoBehaviour {
         stoptime = 0;
 
         startBPM = 220;   //xmlデータから読み込み引っ張ってくる
+        change = startBPM;
 
         //0小節
         measure.Add(0);
@@ -141,6 +147,34 @@ public class Notescreate : MonoBehaviour {
         //拍が変わるたびに前のlistにcapselの値を入れ、capselに変わった後のlistの値を入れる
         if (haku != hakucount)
         {
+            if (stoptap == 1 && updownstop == 0)
+            {
+                copyDes = (GameObject)Instantiate(Des, stopcopy.localPosition, Quaternion.identity);
+                copyDes.transform.SetParent(Parent, false);
+                for (int d = 0; d < 3; d++)
+                {
+                    capsel.OPTION[d] = 0;
+                }
+            }
+
+            if (changetap == 2 && updownBPM == 0)
+            {
+                copyDes = (GameObject)Instantiate(Des, changecopy.localPosition, Quaternion.identity);
+                copyDes.transform.SetParent(Parent, false);
+                for (int d = 0; d < 3; d++)
+                {
+                    capsel.OPTION[d] = 0;
+                }
+            }
+
+            stoptime = 0;
+            updownstop = 0;
+            stoptap = -1;
+
+            change = change + updownBPM;
+            updownBPM = 0;
+            changetap = -1;
+
             list[hakucount] = capsel;
             capsel = new NotesStore();
             capsel = list[haku];
@@ -149,6 +183,7 @@ public class Notescreate : MonoBehaviour {
 
         input = -1;
         magsize = 0;
+        optiontap = -1;
 
 
         //ノーツの幅変更
@@ -176,68 +211,137 @@ public class Notescreate : MonoBehaviour {
         //stoptime用の入力
         if (Input.GetKeyDown(KeyCode.R))
         {
-            optiontap = 1;
-            changetap = 0;
+            optiontap = 2;
         }
+
         //changeBPM用の入力
         if (Input.GetKeyDown(KeyCode.U))
         {
-            optiontap = 2;
-            stoptap = 0;
+            optiontap = 1;
         }
-        /*
+
         //停止時間
-        if (Input.GetKeyDown(KeyCode.E))
+        if (capsel.OPTION[0] == 1 && optiontap == 1)      //すでに存在していて押したら
         {
-            stoptime -= -1;
-            if(stoptime == 0)
+            copyDes = (GameObject)Instantiate(Des, new Vector3(-510, (cc * -480) + 345 + mymove, 0), Quaternion.identity);
+            copyDes.transform.SetParent(Parent, false);
+            for (int d = 0; d < 3; d++)
             {
-                capsel.OPTION[0] = 0;
-                capsel.OPTION[1] = 0;
-                capsel.OPTION[2] = 0;
+                capsel.OPTION[d] = 0;
             }
-            else
-            {
-
-            }
-            
+            optiontap = -1;
+            stoptap = -1;
+            //destory
         }
-        if (Input.GetKeyDown(KeyCode.T))
+
+        if (optiontap == 1 && stoptap < 0 && changetap < 0)              //何もなく押したら
         {
+            if (capsel.OPTION[1] != 0)
+            {
+                stoptime = capsel.OPTION[1];
+            }
+            stoptap = optiontap;
+            stopcopy = (RectTransform)Instantiate(StopTime, new Vector3(-510, (cc * -480) + 345 + mymove, 0), Quaternion.identity);
+            stopcopy.transform.Rotate(0, 0, 180);
+            stopcopy.GetComponent<Text>().text = "   停止\n_" + stoptime + "拍×" + risum[bunsu] + "分";
+            stopcopy.transform.SetParent(Parent, false);
+            capsel.OPTION[0] = 1;
+            capsel.OPTION[1] = stoptime;
+            capsel.OPTION[2] = risum[bunsu];
+            optiontap = 0;
+        }
 
-        }*/
+        if (stoptap == 1 && optiontap == 2)               //押しててChangeの方を押したら
+        {
+            copyDes = (GameObject)Instantiate(Des, stopcopy.localPosition, Quaternion.identity);
+            copyDes.transform.SetParent(Parent, false);
+            for (int d = 0; d < 3; d++)
+            {
+                capsel.OPTION[d] = 0;
+            }
+            optiontap = -1;
+            stoptap = -1;
+            //Destroy
+        }
 
-        //BPMの幅変更 レーンの横に表示
+        if (Input.GetKeyDown(KeyCode.Y) && stoptap == 1)
+        {
+            updownstop -= 1;
+            if (stoptime + updownstop < 0)
+            {
+                updownstop = -stoptime;
+            }
+            capsel.OPTION[1] = stoptime + updownstop;
+            capsel.OPTION[2] = risum[bunsu];
+            stopcopy.GetComponent<Text>().text = "   停止\n_" + (stoptime + updownstop) + "拍×" + risum[bunsu] + "分";
+        }
+        if (Input.GetKeyDown(KeyCode.I) && stoptap == 1)
+        {
+            updownstop += 1;
+            capsel.OPTION[1] = stoptime + updownstop;
+            capsel.OPTION[2] = risum[bunsu];
+            stopcopy.GetComponent<Text>().text = "   停止\n_" + (stoptime + updownstop) + "拍×" + risum[bunsu] + "分";
+        }
+
+
+        //変則値
         if (capsel.OPTION[0] == 2 && optiontap == 2)      //すでに存在していて押したら
         {
-            optiontap = 0;
+            copyDes = (GameObject)Instantiate(Des, new Vector3(330, (cc * -480) + 345 + mymove, 0), Quaternion.identity);
+            copyDes.transform.SetParent(Parent, false);
+            for (int d = 0; d < 3; d++)
+            {
+                capsel.OPTION[d] = 0;
+            }
+            optiontap = -1;
+            changetap = -1;
             //destory
         }
 
         if (optiontap == 2 && changetap < 0)              //何もなく押したら
         {
+            if (capsel.OPTION[1] != 0)
+            {
+                change = capsel.OPTION[1];
+            }
             changetap = optiontap;
-            changecopy = (RectTransform)Instantiate(changeBPM, new Vector3(298, (cc * -480) + 366 + mymove, 0), Quaternion.identity);
-            changecopy.GetComponent<Text>().text = " BPM\n" + list[haku].OPTION[1];
+            changecopy = (RectTransform)Instantiate(changeBPM, new Vector3(330, (cc * -480) + 345 + mymove, 0), Quaternion.identity);
+            changecopy.transform.Rotate(0,0,180);
+            changecopy.GetComponent<Text>().text = "BPM\n" + change + "      _";
             changecopy.transform.SetParent(Parent, false);
             capsel.OPTION[0] = 2;
-            capsel.OPTION[1] = startBPM;
+            capsel.OPTION[1] = change;
             optiontap = 0;
         }
 
-        if(changetap > 0 && optiontap == 1)               //押しててStopの方を押したら
+        if(changetap == 2 && optiontap == 1)               //押しててStopの方を押したら
         {
+            copyDes = (GameObject)Instantiate(Des, changecopy.localPosition, Quaternion.identity);
+            copyDes.transform.SetParent(Parent, false);
+            for (int d = 0; d < 3; d++)
+            {
+                capsel.OPTION[d] = 0;
+            }
+            optiontap = -1;
+            changetap = -1;
             //Destroy
         }
 
-
-        if (Input.GetKeyDown(KeyCode.Y) && changetap == 2)
+        if (Input.GetKeyDown(KeyCode.E) && changetap == 2)
         {
-
+            updownBPM -= 10;
+            if (change + updownBPM <= 0)
+            {
+                updownBPM = 10 - change;
+            }
+            capsel.OPTION[1] = change + updownBPM;
+            changecopy.GetComponent<Text>().text = "BPM\n" + (change + updownBPM) + "      _";
         }
-        if (Input.GetKeyDown(KeyCode.I) && changetap == 2)
+        if (Input.GetKeyDown(KeyCode.T) && changetap == 2)
         {
-
+            updownBPM += 10;
+            capsel.OPTION[1] = change + updownBPM;
+            changecopy.GetComponent<Text>().text = "BPM\n" + (change + updownBPM) + "      _";
         }
 
 
