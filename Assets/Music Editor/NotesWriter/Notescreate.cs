@@ -173,6 +173,7 @@ public class Notescreate : MonoBehaviour {
             if (changetap == 2 && updownBPM == 0)
             {
                 copyDes = (GameObject)Instantiate(Des, changecopy.localPosition, Quaternion.identity);
+                Debug.Log("copyDes is " + copyDes);
                 copyDes.transform.SetParent(Parent, false);
                 for (int d = 0; d < 3; d++)
                 {
@@ -317,11 +318,16 @@ public class Notescreate : MonoBehaviour {
             {
                 change = capsel.OPTION[1];
             }
+            Debug.Log("changecopy1 is "+changecopy);
             changetap = optiontap;
             changecopy = (RectTransform)Instantiate(changeBPM, new Vector3(330, (cc * -480) + 345 + mymove, 0), Quaternion.identity);
+            Debug.Log("changecopy2 is " + changecopy);
             changecopy.transform.Rotate(0,0,180);
+            Debug.Log("changecopy3 is " + changecopy);
             changecopy.GetComponent<Text>().text = "BPM\n" + change + "      _";
+            Debug.Log("changecopy4 is " + changecopy);
             changecopy.transform.SetParent(Parent, false);
+            Debug.Log("changecopy5 is " + changecopy);
             capsel.OPTION[0] = 2;
             capsel.OPTION[1] = change;
             optiontap = 0;

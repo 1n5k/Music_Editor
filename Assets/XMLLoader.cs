@@ -9,7 +9,7 @@ using System.Text;
 using System.IO;
 using UnityEngine.UI;
 
-class MusicData
+public class MusicData
 {
     public string Title;
     public string Subtitle;
@@ -37,12 +37,18 @@ public class XMLLoader : MonoBehaviour
     static Boolean NotesChecker = false;
     static MusicData LoadedData;
     // Use this for initialization
-    static string[] Opt = { "TITLE", "SUBTITLE", "ARTIST", "BPM", "JACKET", "MUSIC", "DIFFICULTY",
-                            "MOVIE", "OFFSET", "SELECTOFFSET", "SELECTLONG", "NOTES",  };
-    
+    public InputField addr;
+
+            
     public void OpenXml()
     {
+
+        EditFile = @addr.text;
+        Debug.Log("inputfield addr is "+EditFile);
         EditFile = @"D:\Music_Editor\Score\NightOfKnights.xml";//OpenFile.text;
+
+        Debug.Log(EditFile[0]);
+
         FileStream fs = null;
         XmlReader xmlReader = null;
         XmlReaderSettings settings = null;
@@ -63,9 +69,9 @@ public class XMLLoader : MonoBehaviour
             {
                 XmlNodeType nType = xmlReader.NodeType;
                 //Debug.Log("NodeType: " + nType.ToString() + "\r\n");
-                Debug.Log("LocalName: " + xmlReader.LocalName + "\r\n");
+               // Debug.Log("LocalName: " + xmlReader.LocalName + "\r\n");
                 //Debug.Log("Depth: " + Convert.ToString(xmlReader.Depth) + "\r\n");
-                Debug.Log("Name: " + xmlReader.Name + "\r\n");
+                //Debug.Log("Name: " + xmlReader.Name + "\r\n");
                 if (xmlReader.Name != "" && xmlReader != null && nType == XmlNodeType.Element)
                 {
                     Listener = xmlReader.Name;
@@ -91,16 +97,16 @@ public class XMLLoader : MonoBehaviour
                 {
                     Type valueType = xmlReader.ValueType;
                     //Debug.Log("ValueType: " + valueType.ToString() + "\r\n");
-                    Debug.Log("Value: " + xmlReader.Value + "\r\n");
+                    //Debug.Log("Value: " + xmlReader.Value + "\r\n");
                     CheckNodeData(Listener, xmlReader.Value);
                     
                 }
                 
 
-                Debug.Log("殺す");
+                //Debug.Log("殺す");
 
                 //属性がある場合
-                if (xmlReader.HasAttributes == true)
+               /* if (xmlReader.HasAttributes == true)
                 {
                     for (int i = 0; i < xmlReader.AttributeCount; i++)
                     {
@@ -116,7 +122,7 @@ public class XMLLoader : MonoBehaviour
                     xmlReader.MoveToElement();
                 }
 
-                Debug.Log("\r\n");
+                Debug.Log("\r\n");*/
             }
 
             for (int n=0;n < 4;n++){
@@ -124,6 +130,7 @@ public class XMLLoader : MonoBehaviour
                 if (LoadedData.Notes[n] != null)
                 {
                     Debug.Log("Notes found: "+n);
+                    NotesPadding(ref LoadedData.Notes[n]);
                 }
             }
         }
@@ -149,6 +156,119 @@ public class XMLLoader : MonoBehaviour
     {
         
     }
+
+    public void NotesPadding(ref string score)
+    {
+        string pad = @"
+    0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|";
+        
+        int i = 0;int m = 0;
+        char[] spc = { ' ' };
+        char[] rmsymbl = { ',', '|',';','@'};
+        
+        string[] divscore = { };
+        var linecnt = score.ToList().Where(c => c.Equals('\n')).Count() ;//kopipe
+        Debug.Log(linecnt);
+        StreamWriter log = new StreamWriter(@"D:\Music_Editor\log.txt", true);
+        StreamWriter log1 = new StreamWriter(@"D:\Music_Editor\log1.txt", true);
+        int b = 0;
+        divscore = score.Split('\n');
+        for (int c = 0; c < linecnt; c++) { 
+            foreach (char s in spc)
+       
+                {
+                    divscore[c] = divscore[c].Replace(s.ToString(), "");
+                    b++;
+                }
+        }
+
+        for (; i < linecnt; i++)
+        {
+            //Debug.Log("divscore["+i+"] is " + divscore[i]);
+            if (0 < divscore[i].IndexOf('@'))
+            {
+                Debug.Log("find @");
+                int n = i + 1;
+                int intrvl = n - m;
+                switch (intrvl)
+                {
+                    case 8:
+                        for (; m < n; m++)
+                        {
+                            if (m != n - 1)
+                            {
+                                for (int k = 0; k < 5; k++) {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len-1, pad);
+                                    //Debug.Log("divscore[m] is" + divscore[m]);
+                                    //score = string.Join("", divscore[m]);
+                                }
+                               
+                                //log.WriteLine(divscore[m]);
+                            }
+                            else
+                            {
+                                for (int k = 0; k < 5; k++)
+                                {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len-1, pad);
+                                }
+                                //log.WriteLine(divscore[m]);
+                            }
+                            
+                        }
+                        break;
+                    case 16:
+                        for (; m<n; m++)
+                        {
+                            if (m != n - 1)
+                            {
+                                for (int k = 0; k < 2; k++)
+                                {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len-1, pad);
+                                }
+                                //log.WriteLine(divscore[m]);
+                            }
+                            else
+                            {
+                                for (int k = 0; k < 2; k++)
+                                {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len-1, pad);
+                                }
+                                //log.WriteLine(divscore[m]);
+                            }
+                            
+                        }
+                            break;
+                }
+                m = i + 1;
+                
+            }
+            
+        }
+        //string padednotes = string.Join("\n", divscore);
+        StringBuilder padednotes = new StringBuilder( string.Join("\n", divscore) );
+        log.WriteLine(padednotes);
+        foreach (char c in rmsymbl)
+         {
+             padednotes = padednotes.Replace(c.ToString(), "");
+
+         }
+        log1.WriteLine(padednotes);
+        /*foreach (string s in padednotes)
+        {
+            log.WriteLine(s);
+        }*/
+
+        log.Flush();
+        log.Close();
+        log1.Flush();
+        log1.Close();
+
+    }
+
     //タグを発見したときに判別を行う
     public void CheckNodeData(string checkdata, string datavalue)
     {
@@ -231,9 +351,11 @@ public class XMLLoader : MonoBehaviour
             }
         }
     }
-    /*public void SendToGlobalValue(MusicData Sender)
+   public void SendToGlobalValue(MusicData Sender)
     {
-       /* MusicData buff = GameObject.Find("GlobalValueControl").GetComponent<GlobalValue>().MusicParam;
+
+
+        /* MusicData buff = GameObject.Find("GlobalValueControl").GetComponent<GlobalValue>().MusicParam;
         buff.Title = LoadedData.Title;
         buff.Subtitle = LoadedData.Subtitle;
         buff.Artist = LoadedData.Artist;
@@ -245,6 +367,6 @@ public class XMLLoader : MonoBehaviour
         buff.Offset = LoadedData.Offset;
         buff.SelectOffset = LoadedData.SelectOffset;
         buff.Selectlong = LoadedData.Selectlong;
-        buff.Notes = LoadedData.Notes;
-    }*/
+        buff.Notes = LoadedData.Notes;*/
+    }
 }
