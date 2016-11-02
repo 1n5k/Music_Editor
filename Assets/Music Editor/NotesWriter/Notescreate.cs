@@ -81,6 +81,10 @@ public class Notescreate : MonoBehaviour {
     public NotesStore None = new NotesStore(); //初期化用
     public NotesStore LongStock = new NotesStore(); //Londnotesのストック
     public NotesStore SlideStock = new NotesStore(); //slidenotes用のストック
+
+    public List<int> delete = new List<int>();
+    private int savehaku = 0;
+
     //Beat
     public List<int> measure = new List<int>();
     private int Beat = 0;
@@ -89,15 +93,8 @@ public class Notescreate : MonoBehaviour {
 
     string print_array = "";
 
-
-    [Serializable]
-    public struct Test
-    {
-        public string NOTES;
-    }
-    public Test test;
-    private string serializeDataPath;
-
+    private int ClacBeat = 0;
+    private int mea = 0;
 
     void Start()
     {
@@ -115,8 +112,6 @@ public class Notescreate : MonoBehaviour {
         //0小節
         measure.Add(0);
 
-
-        serializeDataPath = Application.dataPath + "/SerializeData.xml";
     }
 
 
@@ -141,7 +136,7 @@ public class Notescreate : MonoBehaviour {
                 list.Add(None);
                 None = new NotesStore();
             }
-            max++;
+            max = maxcc;
         }
 
         int l = 0;
@@ -157,7 +152,7 @@ public class Notescreate : MonoBehaviour {
         //拍が変わるたびに前のlistにcapselの値を入れ、capselに変わった後のlistの値を入れる
         if (haku != hakucount)
         {
-            if (stoptap == 1 && updownstop == 0)
+            /*if (stoptap == 1 && updownstop == 0)
             {
                 copyDes = (GameObject)Instantiate(Des, stopcopy.localPosition, Quaternion.identity);
                 copyDes.transform.SetParent(Parent, false);
@@ -165,7 +160,7 @@ public class Notescreate : MonoBehaviour {
                 {
                     capsel.OPTION[d] = 0;
                 }
-            }
+            }*/
 
             if (changetap == 2 && updownBPM == 0)
             {
@@ -177,9 +172,9 @@ public class Notescreate : MonoBehaviour {
                 }
             }
 
-            stoptime = 0;
-            updownstop = 0;
-            stoptap = -1;
+            //stoptime = 0;
+            //updownstop = 0;
+            //stoptap = -1;
 
             change = change + updownBPM;
             updownBPM = 0;
@@ -218,19 +213,19 @@ public class Notescreate : MonoBehaviour {
             LongWH.x = v.x * mag;
         }
 
-        //stoptime用の入力
+        //changeBPM用の入力
         if (Input.GetKeyDown(KeyCode.R))
         {
             optiontap = 2;
         }
 
-        //changeBPM用の入力
+        /*//stoptime用の入力
         if (Input.GetKeyDown(KeyCode.U))
         {
             optiontap = 1;
-        }
+        }*/
 
-        //停止時間
+        /*// 停止時間
         if (capsel.OPTION[0] == 1 && optiontap == 1)      //すでに存在していて押したら
         {
             copyDes = (GameObject)Instantiate(Des, new Vector3(-510, (cc * -480) + 345 + mymove, 0), Quaternion.identity);
@@ -241,6 +236,7 @@ public class Notescreate : MonoBehaviour {
             }
             optiontap = -1;
             stoptap = -1;
+            
             //destory
         }
 
@@ -259,6 +255,7 @@ public class Notescreate : MonoBehaviour {
             capsel.OPTION[1] = stoptime;
             capsel.OPTION[2] = risum[bunsu];
             optiontap = 0;
+            updownstop = 0;
         }
 
         if (stoptap == 1 && optiontap == 2)               //押しててChangeの方を押したら
@@ -291,7 +288,7 @@ public class Notescreate : MonoBehaviour {
             capsel.OPTION[1] = stoptime + updownstop;
             capsel.OPTION[2] = risum[bunsu];
             stopcopy.GetComponent<Text>().text = "   停止\n_" + (stoptime + updownstop) + "拍×" + risum[bunsu] + "分";
-        }
+        }*/
 
 
         //変則値
@@ -305,6 +302,7 @@ public class Notescreate : MonoBehaviour {
             }
             optiontap = -1;
             changetap = -1;
+            updownBPM = 0;
             //destory
         }
 
@@ -322,9 +320,10 @@ public class Notescreate : MonoBehaviour {
             capsel.OPTION[0] = 2;
             capsel.OPTION[1] = change;
             optiontap = 0;
+            updownBPM = 0;
         }
 
-        if(changetap == 2 && optiontap == 1)               //押しててStopの方を押したら
+        /*if(changetap == 2 && optiontap == 1)               //押しててStopの方を押したら
         {
             copyDes = (GameObject)Instantiate(Des, changecopy.localPosition, Quaternion.identity);
             copyDes.transform.SetParent(Parent, false);
@@ -335,7 +334,7 @@ public class Notescreate : MonoBehaviour {
             optiontap = -1;
             changetap = -1;
             //Destroy
-        }
+        }*/
 
         if (Input.GetKeyDown(KeyCode.E) && changetap == 2)
         {
@@ -675,16 +674,141 @@ public class Notescreate : MonoBehaviour {
 
         //出力チェック&セーブ機能
         if (Input.GetKeyDown(KeyCode.Escape))
-        {
+        { 
             print_array = "";
-            list[haku] = capsel;        
+            list[haku] = capsel;
+            List<NotesStore> listsave = new List<NotesStore>(list);
+            for (int h = 1; h <= maxcc; h++)
+            {
+                int deleteAddcount = 0;
+                ClacBeat = 0;
+                for (int b = 0; b < h; b++)    //挿入前の拍の合計
+                {
+                    ClacBeat += measure[b];
+                }
+                delete.Add(ClacBeat);
+                for (int e = ClacBeat; e < 48 + ClacBeat; e++)
+                {
+                    Debug.Log(e);
+                    if (listsave[e].OPTION[0] != 0)
+                    {
+                        delete.Add(e);
+                        deleteAddcount++;
+                    } else {
+                        for (int j = 0; j < 12; j++)
+                        {
+                            if (listsave[e].NOTES[j ,0] != 0)
+                            {
+                                delete.Add(e);
+                                deleteAddcount++;
+                                Debug.Log("delete" + e);
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (deleteAddcount == 0)
+                {
+                    savehaku = 4;
+                    for (int f = 1; f <= savehaku; f++)
+                    {
+                        listsave.RemoveRange(ClacBeat + f, 11);
+                    }
+                }
+                else
+                {
+                    int hakusa = 12;
+                    int hakusatemp = 0;
+                    for (int f = 1; f < delete.Count; f++)
+                    {
+                        hakusatemp = delete[f] - delete[f - 1];
+                        hakusatemp = hakusatemp % 12;
+                        if(hakusatemp == 0)
+                        {
+                            hakusatemp = 12;
+                        }
+                        if (hakusatemp < hakusa)
+                        {
+                            hakusa = hakusatemp;
+                        }
+                    }
+                    Debug.Log("hakusa" + hakusa);
+                    if (hakusa == 0 || hakusa == 12)
+                    {
+                        savehaku = 4;
+                    }
+                    else if (hakusa == 6)
+                    {
+                        savehaku = 8;
+                    }
+                    else if (hakusa == 4 || hakusa == 8)
+                    {
+                        savehaku = 12;
+                    }
+                    else if (hakusa == 3 || hakusa == 9)
+                    {
+                        savehaku = 16;
+                    }
+                    else if (hakusa == 2 || hakusa == 10)
+                    {
+                        savehaku = 24;
+                    }
+                    else
+                    {
+                        savehaku = 48;
+                    }
+
+                    if (savehaku == 4)
+                    {
+                        for (int f = 1; f <= savehaku; f++)
+                        {
+                            listsave.RemoveRange(ClacBeat + f, 11);
+                        }
+                    }
+                    else if (savehaku == 8)
+                    {
+                        for (int f = 1; f <= savehaku; f++)
+                        {
+                            listsave.RemoveRange(ClacBeat + f, 5);
+                        }
+                    }
+                    else if (savehaku == 12)
+                    {
+                        for (int f = 1; f <= savehaku; f++)
+                        {
+                            listsave.RemoveRange(ClacBeat + f, 3);
+                        }
+                    }
+                    else if (savehaku == 16)
+                    {
+                        for (int f = 1; f <= savehaku; f++)
+                        {
+                            listsave.RemoveRange(ClacBeat + f, 2);
+                        }
+                    }
+                    else if (savehaku == 24)
+                    {
+                        for (int f = 1; f <= savehaku; f++)
+                        {
+                            listsave.RemoveRange(ClacBeat + f, 1);
+                        }
+                    }
+                }
+                delete = new List<int>();
+                measure[h] = savehaku;
+
+            }
+
+
+            
             for (int me = 0;me < maxcc; me++)
             {
-                for (int h = 0; h < 48; h++)
+                mea += measure[me];
+                for (int h = 0; h < measure[me + 1]; h++)
                 {
                     for (int k = 0; k < 3; k++)
                     {
-                        print_array += list[h + (48 * me)].OPTION[k].ToString();
+                        print_array += listsave[h + mea].OPTION[k].ToString();
                         if (k < 2) { print_array += ","; }
                     }
                     print_array += "|";
@@ -692,19 +816,23 @@ public class Notescreate : MonoBehaviour {
                     {
                         for (int j = 0; j < 5; j++)
                         {
-                            print_array += list[h + (48 * me)].NOTES[i, j].ToString();
+                            print_array += listsave[h + mea].NOTES[i, j].ToString();
                             if (j < 4) { print_array += ","; }
                         }
                         print_array += "|";
                     }
-                    if (h < 47) { print_array += ";\n"; } //章の終わり
+                    if (h < measure[me + 1] - 1) { print_array += ";\n"; } //章の終わり
                     else { print_array += "@;\n"; }
                 }
+                
             }
 
             Debug.Log(print_array);
-            test.NOTES = print_array;
-            XmlUtil.Seialize<Test>(serializeDataPath, test);
+            listsave = new List<NotesStore>();
+            for(int meas = 0;meas < maxcc; meas++)
+            {
+                measure[meas + 1] = 48;
+            }
         }
     }
 

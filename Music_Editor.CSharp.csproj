@@ -70,7 +70,6 @@
     <Compile Include="Assets\Music Editor\NotesWriter\Destroy.cs" />
     <Compile Include="Assets\Music Editor\NotesWriter\Notescreate.cs" />
     <Compile Include="Assets\Music Editor\NotesWriter\SlideCreate.cs" />
-    <Compile Include="Assets\Music Editor\NotesWriter\XmlUtil.cs" />
     <Compile Include="Assets\xml Editor\WritingXml\EditXml.cs" />
     <Compile Include="Assets\xml Editor\readingXml\XMLWriter.cs" />
   </ItemGroup>
