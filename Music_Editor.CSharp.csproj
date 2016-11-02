@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\GetMovieFileFromLocal.cs" />
+    <Compile Include="Assets\GlobalValue.cs" />
     <Compile Include="Assets\Music Editor\Flame\Changecolor.cs" />
     <Compile Include="Assets\Music Editor\Flame\Keyscroll.cs" />
     <Compile Include="Assets\Music Editor\Flame\ScrollController.cs" />

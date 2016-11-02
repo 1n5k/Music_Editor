@@ -96,40 +96,18 @@ public class XMLLoader : MonoBehaviour
                 if (xmlReader.HasValue == true)
                 {
                     Type valueType = xmlReader.ValueType;
-                    //Debug.Log("ValueType: " + valueType.ToString() + "\r\n");
-                    //Debug.Log("Value: " + xmlReader.Value + "\r\n");
                     CheckNodeData(Listener, xmlReader.Value);
                     
                 }
-                
 
-                //Debug.Log("殺す");
-
-                //属性がある場合
-               /* if (xmlReader.HasAttributes == true)
-                {
-                    for (int i = 0; i < xmlReader.AttributeCount; i++)
-                    {
-                        xmlReader.MoveToAttribute(i);
-                        Debug.Log("Attribute Name: " + xmlReader.Name + "\r\n");
-                        if (xmlReader.HasValue == true)
-                        {
-                            Type valueType = xmlReader.ValueType;
-                            Debug.Log("ValueType: " + valueType.ToString() + "\r\n");
-                            Debug.Log("Attribute Value: " + xmlReader.Value + "\r\n");
-                        }
-                    }
-                    xmlReader.MoveToElement();
-                }
-
-                Debug.Log("\r\n");*/
+               
             }
 
             for (int n=0;n < 4;n++){
-                Debug.Log("aaaaaaaa");
+                
                 if (LoadedData.Notes[n] != null)
                 {
-                    Debug.Log("Notes found: "+n);
+                   // Debug.Log("Notes found: "+n);
                     NotesPadding(ref LoadedData.Notes[n]);
                 }
             }
@@ -160,16 +138,15 @@ public class XMLLoader : MonoBehaviour
     public void NotesPadding(ref string score)
     {
         string pad = @"
-    0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|";
+    |0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|0,0,0,0,0|";
         
         int i = 0;int m = 0;
         char[] spc = { ' ' };
         char[] rmsymbl = { ',', '|',';','@'};
-        
+        string send = "";
         string[] divscore = { };
         var linecnt = score.ToList().Where(c => c.Equals('\n')).Count() ;//kopipe
         Debug.Log(linecnt);
-        StreamWriter log = new StreamWriter(@"D:\Music_Editor\log.txt", true);
         StreamWriter log1 = new StreamWriter(@"D:\Music_Editor\log1.txt", true);
         int b = 0;
         divscore = score.Split('\n');
@@ -250,7 +227,11 @@ public class XMLLoader : MonoBehaviour
         }
         //string padednotes = string.Join("\n", divscore);
         StringBuilder padednotes = new StringBuilder( string.Join("\n", divscore) );
-        log.WriteLine(padednotes);
+        send = padednotes.ToString();
+        
+        Debug.Log(send);
+        this.GetComponent<GlobalValue>().AnalyzingNotes(send);
+        Debug.Log("Analyzed");
         foreach (char c in rmsymbl)
          {
              padednotes = padednotes.Replace(c.ToString(), "");
@@ -262,8 +243,7 @@ public class XMLLoader : MonoBehaviour
             log.WriteLine(s);
         }*/
 
-        log.Flush();
-        log.Close();
+        
         log1.Flush();
         log1.Close();
 

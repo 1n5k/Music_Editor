@@ -696,7 +696,7 @@ public class Notescreate : MonoBehaviour {
                         print_array += list[h + (48 * me)].OPTION[k].ToString();
                         if (k < 2) { print_array += ","; }
                     }
-                    print_array += "|";
+                    print_array += "||";
                     for (int i = 0; i < 12; i++)
                     {
                         for (int j = 0; j < 5; j++)
