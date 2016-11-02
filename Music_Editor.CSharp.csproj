@@ -68,6 +68,7 @@
     <Compile Include="Assets\Music Editor\Flame\ScrollController.cs" />
     <Compile Include="Assets\Music Editor\Flame\Widthdisplay.cs" />
     <Compile Include="Assets\Music Editor\NotesWriter\Destroy.cs" />
+    <Compile Include="Assets\Music Editor\NotesWriter\LoadData.cs" />
     <Compile Include="Assets\Music Editor\NotesWriter\Notescreate.cs" />
     <Compile Include="Assets\Music Editor\NotesWriter\SlideCreate.cs" />
     <Compile Include="Assets\xml Editor\WritingXml\EditXml.cs" />

@@ -535,6 +535,7 @@ public class Notescreate : MonoBehaviour {
                 LongWH.y = v.y +(updown * 490 / risum[bunsu]);
                 longcopy.sizeDelta = LongWH;
 
+                LongStock.NOTES[longtap, 2] = longtap + 1;
                 LongStock.NOTES[longtap, 3] = risum[bunsu];
                 LongStock.NOTES[longtap, 4] = updown;
                 list[starthaku].NOTES = LongStock.NOTES;
@@ -603,7 +604,7 @@ public class Notescreate : MonoBehaviour {
             {
                 slidecopy.GetComponent<SlideCreate>().Slider(54 * (Slidefirsttap - Slidesecondtap), updown * (490 / risum[bunsu]));
 
-                SlideStock.NOTES[Slidefirsttap, 2] = Slidesecondtap;
+                SlideStock.NOTES[Slidefirsttap, 2] = Slidesecondtap + 1;
                 SlideStock.NOTES[Slidefirsttap, 3] = risum[bunsu];
                 SlideStock.NOTES[Slidefirsttap, 4] = updown;
                 list[starthaku].NOTES = SlideStock.NOTES;
@@ -674,7 +675,8 @@ public class Notescreate : MonoBehaviour {
 
         //出力チェック&セーブ機能
         if (Input.GetKeyDown(KeyCode.Escape))
-        { 
+        {
+            mea = 0;
             print_array = "";
             list[haku] = capsel;
             List<NotesStore> listsave = new List<NotesStore>(list);
@@ -689,7 +691,6 @@ public class Notescreate : MonoBehaviour {
                 delete.Add(ClacBeat);
                 for (int e = ClacBeat; e < 48 + ClacBeat; e++)
                 {
-                    Debug.Log(e);
                     if (listsave[e].OPTION[0] != 0)
                     {
                         delete.Add(e);
@@ -701,7 +702,6 @@ public class Notescreate : MonoBehaviour {
                             {
                                 delete.Add(e);
                                 deleteAddcount++;
-                                Debug.Log("delete" + e);
                                 break;
                             }
                         }
