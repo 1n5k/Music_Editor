@@ -1129,11 +1129,9 @@ MonoBehaviour:
   StopTime: {fileID: 1251921151}
   changeBPM: {fileID: 1847273903}
   mymove: 0
-  yes: 0
+
+  delete: 
   measure: 
-  print_array: 
-  test:
-    NOTES: 
 --- !u!212 &935217712
 SpriteRenderer:
   m_ObjectHideFlags: 0
