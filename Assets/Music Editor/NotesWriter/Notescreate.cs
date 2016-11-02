@@ -104,7 +104,7 @@ public class Notescreate : MonoBehaviour {
         WH = v;
         LongWH = v;
 
-        stoptime = 0;
+        //stoptime = 0;
 
         startBPM = 220;   //xmlデータから読み込み引っ張ってくる
         change = startBPM;
@@ -338,17 +338,17 @@ public class Notescreate : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.E) && changetap == 2)
         {
-            updownBPM -= 10;
+            updownBPM -= 1;
             if (change + updownBPM <= 0)
             {
-                updownBPM = 10 - change;
+                updownBPM = 1 - change;
             }
             capsel.OPTION[1] = change + updownBPM;
             changecopy.GetComponent<Text>().text = "BPM\n" + (change + updownBPM) + "      _";
         }
         if (Input.GetKeyDown(KeyCode.T) && changetap == 2)
         {
-            updownBPM += 10;
+            updownBPM += 1;
             capsel.OPTION[1] = change + updownBPM;
             changecopy.GetComponent<Text>().text = "BPM\n" + (change + updownBPM) + "      _";
         }
