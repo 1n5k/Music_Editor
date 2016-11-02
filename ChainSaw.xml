@@ -1,0 +1,25 @@
+﻿<MusicData>
+  <TITLE>サヨナラチェーンソー</TITLE>
+  <SUBTITLE>結月ゆかり</SUBTITLE>
+  <ARTIST>くらげP</ARTIST>
+  <BPM>195</BPM>
+  <JACKET>\Songs\SayonaraChainSaw</JACKET>
+  <MUSIC>\Songs\SayonaraChainSaw\ChainSaw.ogg</MUSIC>
+  <DIFFICULTY>
+    <EASY>3</EASY>
+    <NORMAL>5</NORMAL>
+    <HARD>8</HARD>
+    <EXTRA>10</EXTRA>
+  </DIFFICULTY>
+  <MOVIE>\Songs\SayonaraChainSaw\Sayonara_ChainSaw.ogg</MOVIE>
+  <OFFSET>10.935</OFFSET>
+  <SELECTOFFSET>1000.935</SELECTOFFSET>
+  <SELECTLONG>10000</SELECTLONG>
+
+  <NOTES>
+    <EASY>1</EASY>
+    <NORMAL>2</NORMAL>
+    <HARD>3</HARD>
+    <EXTRA>4</EXTRA>
+  </NOTES>
+</MusicData>

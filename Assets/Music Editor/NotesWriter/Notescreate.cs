@@ -11,6 +11,7 @@ using UnityEngine.UI;
 using System.Xml.Serialization;
 
 
+
 public class NotesStore{
 
     public int[,] NOTES = new int[12, 5];
@@ -75,6 +76,7 @@ public class Notescreate : MonoBehaviour {
     RectTransform stopcopy;
     RectTransform changecopy;
     GameObject copyDes;
+    public Boolean yes = false;
     //List構造体
     public List<NotesStore> list = new List<NotesStore>();
     public NotesStore capsel = new NotesStore();
@@ -121,6 +123,7 @@ public class Notescreate : MonoBehaviour {
         cc = Keyscroll.getcc(); //現在いる小節
         maxcc = Keyscroll.getmaxcc(); //最大小節
         Debug.Log(mymove);
+        
 
         //新しい小節の長さ決めと初期化
         if (max < maxcc)
@@ -165,6 +168,7 @@ public class Notescreate : MonoBehaviour {
             if (changetap == 2 && updownBPM == 0)
             {
                 copyDes = (GameObject)Instantiate(Des, changecopy.localPosition, Quaternion.identity);
+                Debug.Log("copyDes is " + copyDes);
                 copyDes.transform.SetParent(Parent, false);
                 for (int d = 0; d < 3; d++)
                 {
@@ -312,11 +316,16 @@ public class Notescreate : MonoBehaviour {
             {
                 change = capsel.OPTION[1];
             }
+            Debug.Log("changecopy1 is "+changecopy);
             changetap = optiontap;
             changecopy = (RectTransform)Instantiate(changeBPM, new Vector3(330, (cc * -480) + 345 + mymove, 0), Quaternion.identity);
+            Debug.Log("changecopy2 is " + changecopy);
             changecopy.transform.Rotate(0,0,180);
+            Debug.Log("changecopy3 is " + changecopy);
             changecopy.GetComponent<Text>().text = "BPM\n" + change + "      _";
+            Debug.Log("changecopy4 is " + changecopy);
             changecopy.transform.SetParent(Parent, false);
+            Debug.Log("changecopy5 is " + changecopy);
             capsel.OPTION[0] = 2;
             capsel.OPTION[1] = change;
             optiontap = 0;
@@ -811,7 +820,7 @@ public class Notescreate : MonoBehaviour {
                         print_array += listsave[h + mea].OPTION[k].ToString();
                         if (k < 2) { print_array += ","; }
                     }
-                    print_array += "|";
+                    print_array += "||";
                     for (int i = 0; i < 12; i++)
                     {
                         for (int j = 0; j < 5; j++)
@@ -827,6 +836,20 @@ public class Notescreate : MonoBehaviour {
                 
             }
 
+            
+           // finalle();
+            //XMLWriter writer = GetComponent<XMLWriter>();
+            if (writer!=null)
+            {
+                yes = writer.Write(ref print_array);
+                Debug.Log(yes);
+                print_array = "";
+            }
+            else
+            {
+                Debug.Log(writer);
+                Debug.Log("writer is NULL");
+            }
             Debug.Log(print_array);
             listsave = new List<NotesStore>();
             for(int meas = 0;meas < maxcc; meas++)

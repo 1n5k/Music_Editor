@@ -9,7 +9,7 @@ using System.Text;
 using System.IO;
 using UnityEngine.UI;
 
-class MusicData
+/*public class MusicData
 {
     public string Title;
     public string Subtitle;
@@ -23,30 +23,31 @@ class MusicData
     public double SelectOffset;
     public double Selectlong;
     public string[] Notes = new string[4];
-};
+};*/
 public class EditXml : MonoBehaviour
 {
 
-    string EditFile;
+    /*string EditFile;
 
-    public Text XMLData;
-    public Text OpenFile;
+       public Text XMLData;
+       public Text OpenFile;
 
-    public Text TITLEBOX;
-    public Text SUBTITLEBOX;
-    public Text ARTISTBOX;
-    public Text BPMBOX;
-    public Text MUSICBOX;
-    public Text JACKETBOX;
-    public Text DIFFICULTYBOX;
-    public Text MOVIEBOX;
-    public Text OFFSETBOX;
-    public Text SELECTOFFSETBOX;
-    public Text SELECTLONGBOX;
-    public Text NOTESBOX;
-    static Boolean DifficultyChecker = false;
-    static Boolean NotesChecker = false;
-    static MusicData LoadedData;
+       public Text TITLEBOX;
+       public Text SUBTITLEBOX;
+       public Text ARTISTBOX;
+       public Text BPMBOX;
+       public Text MUSICBOX;
+       public Text JACKETBOX;
+       public Text DIFFICULTYBOX;
+       public Text MOVIEBOX;
+       public Text OFFSETBOX;
+       public Text SELECTOFFSETBOX;
+       public Text SELECTLONGBOX;
+       public Text NOTESBOX;
+       static Boolean DifficultyChecker = false;
+       static Boolean NotesChecker = false;
+       static MusicData LoadedData;
+
     // Use this for initialization
     public void OpenXml()
     {
@@ -265,5 +266,5 @@ public class EditXml : MonoBehaviour
                 xmlWriter.Close();
             }
         }
-    }
+    }*/
 }
