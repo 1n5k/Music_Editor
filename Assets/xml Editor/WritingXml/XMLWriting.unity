@@ -638,20 +638,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7e35f083577fe243b39a9139eed57a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  XMLData: {fileID: 1342894284}
-  OpenFile: {fileID: 1009430573}
-  TITLEBOX: {fileID: 518151613}
-  SUBTITLEBOX: {fileID: 1782342697}
-  ARTISTBOX: {fileID: 768008571}
-  BPMBOX: {fileID: 865836343}
-  MUSICBOX: {fileID: 600101896}
-  JACKETBOX: {fileID: 85616930}
-  DIFFICULTYBOX: {fileID: 1731464698}
-  MOVIEBOX: {fileID: 1425944938}
-  OFFSETBOX: {fileID: 146472818}
-  SELECTOFFSETBOX: {fileID: 1479329494}
-  SELECTLONGBOX: {fileID: 1979738829}
-  NOTESBOX: {fileID: 1338197851}
 --- !u!114 &270293027
 MonoBehaviour:
   m_ObjectHideFlags: 0

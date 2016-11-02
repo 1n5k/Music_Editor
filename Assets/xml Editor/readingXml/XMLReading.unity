@@ -97,6 +97,7 @@ GameObject:
   - 114: {fileID: 270293028}
   - 114: {fileID: 270293027}
   - 114: {fileID: 270293026}
+  - 114: {fileID: 270293030}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -131,11 +132,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 270293024}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03c0b18710bad5947aa1a1ed218d0ecd, type: 3}
+  m_Script: {fileID: 11500000, guid: 751c359fd49a74c479910278ffcf50a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  XMLData: {fileID: 1342894284}
-  OpenFile: {fileID: 1009430573}
+  XMLData: {fileID: 0}
+  addr: {fileID: 1118929534}
 --- !u!114 &270293027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,7 +158,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_PressedColor: {r: 1, g: 0.5, b: 0.5, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -221,6 +222,23 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 270293024}
+--- !u!114 &270293030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 270293024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67a3dd6aac5208b4cabccef00e8badd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxNotes: 0
+  BMSCount: 0
+  Multi: 10000
+  Offset: 0
+  MusicName: {fileID: 0}
+  JacketPlane: {fileID: 0}
 --- !u!1 &758966192
 GameObject:
   m_ObjectHideFlags: 0

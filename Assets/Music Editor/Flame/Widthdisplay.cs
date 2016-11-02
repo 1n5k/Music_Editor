@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.IO;
 
 public class Widthdisplay : MonoBehaviour {
     private int Width;
@@ -9,6 +14,7 @@ public class Widthdisplay : MonoBehaviour {
 
 	void Start () {
         width = GameObject.Find("Widthdisplay");
+
     }
 
     void Update () {
