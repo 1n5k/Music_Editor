@@ -27,9 +27,11 @@ public class Keyscroll : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        //マウスのロック
-       //Cursor.lockState = CursorLockMode.Locked;
-
+        i = 0;
+        count = 0;
+        one = 0;
+        cc = 1;
+        Ysum = 0;
         Ymove = -0.1f * 480;//1小節の大きさ
         try
         {

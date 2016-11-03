@@ -152,7 +152,7 @@ public class GlobalValue : MonoBehaviour
                         //Debug.Log("bufflen is "+buff.Option.Length);
                         //Debug.Log("k is "+k.ToString()+"nowbeat is"+linepos.ToString());
                         buff.Option[k] = ConvertStringToInt(ref i,analyze);
-                         
+
                         
                         k++;
                         k %= 3;

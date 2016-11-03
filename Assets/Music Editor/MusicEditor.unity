@@ -120,7 +120,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -33, y: 450.56976}
+  m_AnchoredPosition: {x: -33, y: -0.00024414062}
   m_SizeDelta: {x: 761, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &118200853
@@ -515,8 +515,8 @@ GameObject:
   - 33: {fileID: 415513449}
   - 23: {fileID: 415513448}
   - 114: {fileID: 415513447}
-  - 61: {fileID: 415513453}
-  - 50: {fileID: 415513452}
+  - 50: {fileID: 415513453}
+  - 61: {fileID: 415513452}
   m_Layer: 0
   m_Name: Slide
   m_TagString: Untagged
@@ -619,7 +619,21 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 415513445}
---- !u!50 &415513452
+--- !u!61 &415513452
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 415513445}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: -25, y: -2.5}
+  serializedVersion: 2
+  m_Size: {x: 14.66, y: 2.41}
+--- !u!50 &415513453
 Rigidbody2D:
   serializedVersion: 2
   m_ObjectHideFlags: 0
@@ -636,20 +650,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &415513453
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 415513445}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_Offset: {x: -25, y: -2.5}
-  serializedVersion: 2
-  m_Size: {x: 14.66, y: 2.41}
 --- !u!1 &451781062
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,7 +792,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 493943730}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1.001}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 60, y: 100, z: 100}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -1346,7 +1346,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c924eb2a420e7374290dbbdba6884106, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bf6b18b7b3002874b8cc5237ecb0af15, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

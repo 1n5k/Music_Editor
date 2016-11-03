@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/xml Editor/readingXml/XMLReading.unity
+    path: Assets/Xml Editor/readingXml/XMLReading.unity
   - enabled: 1
     path: Assets/Music Editor/MusicEditor.unity

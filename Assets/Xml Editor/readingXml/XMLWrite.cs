@@ -18,47 +18,57 @@ using System.Runtime.InteropServices;
     }
 }*/
 public class XMLWrite{
+    String scoresname;
     public Boolean Write(ref string score)
     {
-        String scores = "score.xml";
+        if (XMLLoader.LoadedData.Title != null)
+        {
+
+            scoresname = XMLLoader.LoadedData.Title + ".xml";
+        }
+        else
+        {
+            scoresname = "score.xml";
+        }
         string[] tag =  {
             "<MusicData>",      "\n", 
-            "\t<TITLE>",          "</TITLE>\n",
-            "\t<SUBTITLE>",       "</SUBTITLE>\n",
-            "\t<ARTIST>",         "</ARTIST>\n",
-            "\t<BPM>",            "</BPM>\n",
-            "\t<JACKET>",         "</JACKET>\n",
-            "\t<MUSIC>",          "</MUSIC>\n",
-            "\t<DIFFCULTY>",      "\n", 
-            "\t\t<EASY>",         "</EASY>\n",
-            "\t\t<NORMAL>",       "</NORMAL>\n",
-            "\t\t<HARD>",         "</HARD>\n",
-            "\t\t<EXTRA>",       "</EXTRA>\n",
-            "\t</DIFFCULTY>",     "\n",
-            "\t<MOVIE>",          "</MOVIE>\n",
-            "\t<OFFSET>",         "</OFFSET>\n",
-            "\t<SELECTOFFSET>",   "</SELECTOFFSET>\n",
-            "\t<SELECTLONG>",     "</SELECTLONG>\n",
-            "\t<NOTES>",          "\n",
-            "\t\t<EASY>",         "\t\t</EASY>\n",
-            "\t\t<NORMAL>",       "\t\t</NORMAL>\n",
-            "\t\t<HARD>",         "\t\t</HARD>\n",
-            "\t\t<EXTRA>",       "\t\t</EXTRA>\n",
-            "\t</NOTES>",         "\n",
+            "  <TITLE>",          "</TITLE>\n",
+            "  <SUBTITLE>",       "</SUBTITLE>\n",
+            "  <ARTIST>",         "</ARTIST>\n",
+            "  <BPM>",            "</BPM>\n",
+            "  <JACKET>",         "</JACKET>\n",
+            "  <MUSIC>",          "</MUSIC>\n",
+            "  <DIFFCULTY>",      "\n", 
+            "    <EASY>",         "</EASY>\n",
+            "    <NORMAL>",       "</NORMAL>\n",
+            "    <HARD>",         "</HARD>\n",
+            "    <EXTRA>",       "</EXTRA>\n",
+            "  </DIFFCULTY>",     "\n",
+            "  <MOVIE>",          "</MOVIE>\n",
+            "  <OFFSET>",         "</OFFSET>\n",
+            "  <SELECTOFFSET>",   "</SELECTOFFSET>\n",
+            "  <SELECTLONG>",     "</SELECTLONG>\n",
+            "  <NOTES>",          "\n",
+            "    <EASY>",         "    </EASY>\n",
+            "    <NORMAL>",       "    </NORMAL>\n",
+            "    <HARD>",         "    </HARD>\n",
+            "    <EXTRA>",       "    </EXTRA>\n",
+            "  </NOTES>",         "\n",
             "</MusicData>",     "\n",
         };
         MusicData savedata = new MusicData();
+        savedata = XMLLoader.LoadedData;
+        savedata.Notes[DiffChoice.diff] = score;
         try
         {
             
             Debug.Log(Directory.GetCurrentDirectory()); //デバッグ用
 
             Directory.CreateDirectory("Score");
-            String path = Directory.GetCurrentDirectory()+ @"\Score\" + scores; //保存するパスを取得
+            String path = Directory.GetCurrentDirectory()+ @"\Score\" + scoresname; //保存するパスを取得
             Debug.Log(path);
-            
             XmlWriter writer = XmlWriter.Create(path);
-            savedata.Notes[0] = score;
+
             for (int i = 0; i < 48; i++)
             {
                 switch(i) {
