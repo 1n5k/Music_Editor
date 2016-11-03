@@ -39,14 +39,15 @@ public class XMLLoader : MonoBehaviour
     public static MusicData LoadedData = new MusicData();
     // Use this for initialization
     public InputField addr;
-
+    public int errnum;
             
     public void OpenXml()
     {
 
         EditFile = @addr.text;
         Debug.Log("inputfield addr is "+EditFile);
-        EditFile = @"D:\Music_Editor\Score\NightOfKnights.xml";//OpenFile.text;
+        //EditFile = @"D:\Music_Editor\Score\NightOfKnights.xml";//OpenFile.text;
+        
 
         FileStream fs = null;
         XmlReader xmlReader = null;
@@ -57,22 +58,17 @@ public class XMLLoader : MonoBehaviour
         {
             Debug.Log(EditFile + "を読み込みます\r\n");
             fs = new FileStream(EditFile, FileMode.Open);
-            Debug.Log("a");
+            //Debug.Log("a");
             settings = new XmlReaderSettings();
             settings.IgnoreComments = true;
             settings.IgnoreWhitespace = true;
 
             xmlReader = XmlReader.Create(fs, settings);
-            Debug.Log("b");
-            Debug.Break();
+            //Debug.Log("b");
             while (xmlReader.Read() == true)
             {
                 XmlNodeType nType = xmlReader.NodeType;
-                //Debug.Log("NodeType: " + nType.ToString() + "\r\n");
-                // Debug.Log("LocalName: " + xmlReader.LocalName + "\r\n");
-                //Debug.Log("Depth: " + Convert.ToString(xmlReader.Depth) + "\r\n");
-                //Debug.Log("Name: " + xmlReader.Name + "\r\n");
-               // Debug.Log("c");
+                // Debug.Log("c");
                 if (xmlReader.Name != "" && xmlReader != null && nType == XmlNodeType.Element)
                 {
                     Listener = xmlReader.Name;
@@ -100,19 +96,16 @@ public class XMLLoader : MonoBehaviour
                     CheckNodeData(Listener, xmlReader.Value);
                     
                 }
-
-               
+                
             }
-
-
 
             if (LoadedData.Notes[DiffChoice.diff] != null)
             { 
                 NotesPadding(ref LoadedData.Notes[DiffChoice.diff]);
+                SceneManager.LoadScene("MusicEditor");
             }
             else
             {
-                Debug.Log("春風亭昇太");
                 SceneManager.LoadScene("MusicEditor");
             }
             
@@ -131,7 +124,6 @@ public class XMLLoader : MonoBehaviour
             {
                 xmlReader.Close();
             }
-            //SendToGlobalValue(LoadedData);
         }
     }
 
@@ -156,7 +148,7 @@ public class XMLLoader : MonoBehaviour
         string[] divscore = { };
         var linecnt = score.ToList().Where(c => c.Equals('\n')).Count() ;//kopipe
         Debug.Log(linecnt);
-        StreamWriter log1 = new StreamWriter(@"D:\Music_Editor\log1.txt", true);
+        StreamWriter log = new StreamWriter(Directory.GetCurrentDirectory() +@"\1og.txt", true);
         int b = 0;
         divscore = score.Split('\n');
         for (int c = 0; c < linecnt; c++) { 
@@ -167,6 +159,7 @@ public class XMLLoader : MonoBehaviour
                     b++;
                 }
         }
+        
 
         for (; i < linecnt; i++)
         {
@@ -189,6 +182,7 @@ public class XMLLoader : MonoBehaviour
                                     divscore[m] = divscore[m].Insert(len - 1, pad);
 
                                 }
+
                             }
                             else
                             {
@@ -198,6 +192,7 @@ public class XMLLoader : MonoBehaviour
                                     divscore[m] = divscore[m].Insert(len - 1, pad);
                                 }
                             }
+
                         }
                         break;
                     case 8:
@@ -244,6 +239,7 @@ public class XMLLoader : MonoBehaviour
                             }
                         }
                         break;
+                    
                     case 16:
                         for (; m<n; m++)
                         {
@@ -294,10 +290,11 @@ public class XMLLoader : MonoBehaviour
             }
             
         }
+
         StringBuilder padednotes = new StringBuilder( string.Join("\n", divscore) );
         send = padednotes.ToString();
-        
         Debug.Log(send);
+        log.WriteLine(send);
         this.GetComponent<GlobalValue>().AnalyzingNotes(send);
         Debug.Log("Analyzed");
         foreach (char c in rmsymbl)
@@ -305,15 +302,15 @@ public class XMLLoader : MonoBehaviour
              padednotes = padednotes.Replace(c.ToString(), "");
 
          }
-        log1.WriteLine(padednotes);
+        //log.WriteLine(padednotes);
         /*foreach (string s in padednotes)
         {
             log.WriteLine(s);
         }*/
 
         
-        log1.Flush();
-        log1.Close();
+        log.Flush();
+        log.Close();
 
     }
 

@@ -53,7 +53,7 @@ public class LongArr {
 
 public class GlobalValue : MonoBehaviour
 {
-    public MusicData_ MusicParam;
+    public static MusicData_ MusicParam;
     private GameObject movie;
     public int MaxNotes = 0;
     public double BMSCount = 0;
@@ -69,25 +69,7 @@ public class GlobalValue : MonoBehaviour
     public Text MusicName;
     public GameObject JacketPlane;
     int LongCheckCount = 0;
-    // Use this for initialization
-    /*void Awake()
-    {
-        MusicParam = new MusicData_();
-        this.GetComponent<XMLLoader>().OpenXml();
-        movie = GameObject.Find("MoviePlaneSub");
-        movie.GetComponent<GetMovieFileFromLocal>().StreamPlayVideoAsTexture(MusicParam.MovieAddress, MusicParam.MusicAddress);
-        MusicParam.SelectedDifficult = 3;
-        string[] AnalyzeString = MusicParam.Notes;
-        int Difficult = MusicParam.SelectedDifficult;
-        AnalyzingNotes(AnalyzeString[Difficult]);
-        MusicParam.HiSpeed = 6;
-        CalcBMSCount();
-        CalcLongBMSCount();
-        MusicName.text = MusicParam.Title;
-        //JacketPlane.GetComponent<SetPicture>().setpic(System.IO.Directory.GetCurrentDirectory() + MusicParam.Jackect);
-        //StartCoroutine(GetJacketImage(JacketPlane, MusicParam.Jackect));
-        BMSCount = -Multi;
-    }*/
+    
     IEnumerator GetJacketImage(GameObject gameObject, string filePath)
     {
         WWW file = new WWW("file://" + System.IO.Directory.GetCurrentDirectory() + filePath);
@@ -109,47 +91,53 @@ public class GlobalValue : MonoBehaviour
         MusicParam = new MusicData_();
         bool spaceflag = false; //空白(' ')を発見したら、次の'|'まで読み込みを停止するフラグ
         Musicnote buff = new Musicnote();
-        StreamWriter log = new StreamWriter(@"D:\Music_Editor\log.txt", true);
-        //Debug.Log("analyze[130] is "+"["+analyze[130]+"]");
-        Debug.Log("analyze lenghth is "+analyze.Length);
+        StreamWriter log = new StreamWriter(Directory.GetCurrentDirectory() + @"\log.txt", true);
+        XMLLoader op = new XMLLoader();
+        //Debug.Log("analyze lenghth is "+analyze.Length);
+        //Debug.Log("analyze[773] is "+"["+analyze[773]+"]");
+        //Debug.Log("buff.Noteset[] is "+buff.NotesSet.Length);
         for (int i = 0; i < analyze.Length; i++)
         {
            
             if (analyze[i]== ' ')
             {
-                //Debug.Log("analyze[" + i + "] is space");
+              //  Debug.Log("analyze[" + i + "] is space");
                 spaceflag = true;   //このフラグが起動中は譜面配列化を停止する
                 continue;
             }
             if (analyze[i] == '|')
             {
-                //Debug.Log("analyze["+i+"] is |");
-                    spaceflag = false; //読み込みフラグ解除
+              //  Debug.Log("analyze["+i+"] is |");
+                spaceflag = false; //読み込みフラグ解除
                 notepos++;
                 notepos %= 14;
             }
             else if (analyze[i] == '@')           //小節の終わり
             {
                 MusicParam.Line.Add(linepos-befline);      //１小節の拍数を格納する
-              // Debug.Log("MusicParam.Line.add");
+             //   Debug.Log("analyze[" + i + "] is @");
                 befline = linepos;
             }
             else if ( analyze[i] == '\n')
             {
-                //Debug.Log("analyze[" + i + "] is \\n");
+              // Debug.Log("analyze[" + i + "] is \\n");
 
                 linepos++;
                 
                 MusicParam.NoteList.Add(buff);
                 
                 //Debug.Log("clear!");
-                //       Debug.Log("MusicParam.NoteList.add");
+               
                 buff = new Musicnote();
             }
             else if(analyze[i] == '\r')
             {
-                //Debug.Log("analyze[" + i + "] is \\r");
+               // Debug.Log("analyze[" + i + "] is \\r");
                 continue;
+            }
+            else if (analyze[i] == '\t')
+            {
+               // Debug.Log("analyze[" + i + "] is \\t");
             }
             
             else {
@@ -157,13 +145,14 @@ public class GlobalValue : MonoBehaviour
                 {
                     if (analyze[i] == ';' || analyze[i] == ',')      //拍の終わり
                     {
-                       // Debug.Log("analyze[" + i + "] is ;");
+                      // Debug.Log("analyze[" + i + "] is ; or ,");
                     }
                     else if (notepos < 2)       //変則読み込みモード
                     {
-                        //MusicParam.NoteList[l].Option[k] = ConvertStringToInt(ref i,analyze);
+                        //Debug.Log("bufflen is "+buff.Option.Length);
+                        //Debug.Log("k is "+k.ToString()+"nowbeat is"+linepos.ToString());
                         buff.Option[k] = ConvertStringToInt(ref i,analyze);
-                       // Debug.Log("k is "+k);
+
                         
                         k++;
                         k %= 3;
@@ -172,15 +161,18 @@ public class GlobalValue : MonoBehaviour
                     {
                         if (notepos <= 13)
                         {
+                            int q = notepos - 2;
                             
+                           // Debug.Log("q is " + q);
+                           
                             buff.NotesSet[notepos - 2, k] = ConvertStringToInt(ref i, analyze);
                             //log.Write(buff.NotesSet[notepos - 2, k]);
                             if (k == 0)
                             {
-                                
+                                //Debug.Log("Char.IsNumber()");
                                 if (Char.IsNumber(analyze[i])&&analyze[i] !='0')
                                 {
-                                    //Debug.Log("Char.IsNumber()");
+                                    
                                     MaxNotes++;
                                 }
                             }
@@ -191,17 +183,15 @@ public class GlobalValue : MonoBehaviour
                         {
                         }
                     }
-                    /*for(int w=0;w< MusicParam.NoteList.Count;w++)
-                    {
-                        log.WriteLine(MusicParam.NoteList);
-                    }*/
                     
-                    //log.Write("\n");
                 }
             }
+            //Debug.Log(op.errnum);
+            //op.errnum++;
             
         }
 
+        Debug.Log("桂歌○");
         Debug.Log(MusicParam.NoteList.Count);
 
         log.Flush();
@@ -225,184 +215,16 @@ public class GlobalValue : MonoBehaviour
         }
         return Convert.ToInt32(setstr.ToString());
     }
-    /// <summary>
-    /// BMSカウントを算出する
-    /// </summary>
-    void CalcBMSCount()
-    {
-        List<int> CalcMeasureLine_Calc = MusicParam.Line;
-        List<Musicnote> OptionData_Calc = MusicParam.NoteList;
-        double DeffBPM_Calc = MusicParam.Bpm;
-        double NowBPM_Calc = DeffBPM_Calc;
-        int NowBeat_Calc = 0;
-        double NowBMSCount_Calc = 0;
-        LongArr bufflong;
-        List<LongArr> QueueLongList = new List<LongArr>(); //処理すべきロングノーツをスタックに格納する
-        //小節ごとにBMSカウントを割り当て、計算する
-        for (int i = 0; i < CalcMeasureLine_Calc.Count; i++)
-        {
-            //各拍に変速オプションが存在するか確認、存在する場合停止・変速に合わせて特殊処理を行う
-            for (int j = NowBeat_Calc; NowBeat_Calc < j+CalcMeasureLine_Calc[i]; NowBeat_Calc++)
-            {
-                //変速検出
-                if (OptionData_Calc[NowBeat_Calc].Option[0] == 2)//変速
-                {
-                    NowBPM_Calc = OptionData_Calc[NowBeat_Calc].Option[1];
-                }
-                if(OptionData_Calc[NowBeat_Calc].Option[0] == 1)//停止
-                {
-                    NowBMSCount_Calc += (double)(Multi*OptionData_Calc[NowBeat_Calc].Option[2]) *DeffBPM_Calc/ (double)OptionData_Calc[NowBeat_Calc].Option[1] / NowBPM_Calc;
-                }
-                MusicParam.BMSArr.Add(NowBMSCount_Calc);
-                for (int k = 0; k < 12; k++) {
-                    if (OptionData_Calc[NowBeat_Calc].NotesSet[k, 0] == 2)
-                    {
-                        bufflong = new LongArr();
-                        //ロングノーツを発見したとき、StackLongListにスタックする
-                        bufflong.Keynum = k;
-                        bufflong.CutBeat = OptionData_Calc[NowBeat_Calc].NotesSet[k,3];
-                        bufflong.Count = OptionData_Calc[NowBeat_Calc].NotesSet[k,4];
-                        bufflong.NowCount = 0;
-                        bufflong.StartLineCount = NowBMSCount_Calc;
-                        bufflong.EndLineCount = NowBMSCount_Calc;
-                        QueueLongList.Add(bufflong);
-                    }
-                }
-                for(int l= 0; l < QueueLongList.Count; l++)
-                {
-                    QueueLongList[l].EndLineCount += (double)Multi * DeffBPM_Calc / (double)QueueLongList[l].CutBeat / NowBPM_Calc;
-                    QueueLongList[l].Count--;
-                    if(QueueLongList[l].Count <= 0)
-                    {
-                        MusicParam.LongNotesList.Add(QueueLongList[l]);
-                        QueueLongList.RemoveAt(l);
-                        l--;
-                    }
-                }
-                NowBMSCount_Calc += (double)Multi * DeffBPM_Calc / (double)CalcMeasureLine_Calc[i] / NowBPM_Calc;
-            }
-        }
-        NowBMSCount_Calc += 0;
-    }
 
-    /// <summary>
-    /// ロングノーツを検出、専用のBMSカウントを生成する
-    /// </summary>
-    void CalcLongBMSCount()
-    {
-        List<int> CalcMeasureLine_Calc = MusicParam.Line;
-        List<Musicnote> OptionData_Calc = MusicParam.NoteList;
-        double DeffBPM_Calc = MusicParam.Bpm;
-        double NowBPM_Calc = DeffBPM_Calc;
-        int NowBeat_Calc = 0;
-        double NowBMSCount_Calc = 0;
-        //小節ごとにBMSカウントを割り当て、計算する
-        for (int i = 0; i < CalcMeasureLine_Calc.Count; i++)
-        {
-            //各拍に変速オプションが存在するか確認、存在する場合停止・変速に合わせて特殊処理を行う
-            for (int j = NowBeat_Calc; NowBeat_Calc < j + CalcMeasureLine_Calc[i]; NowBeat_Calc++)
-            {
-                //変速検出
-                if (OptionData_Calc[NowBeat_Calc].Option[0] == 2)
-                {
-                    NowBPM_Calc = OptionData_Calc[NowBeat_Calc].Option[1];
-                }
-                if (OptionData_Calc[NowBeat_Calc].Option[0] == 1)
-                {
-                    NowBMSCount_Calc += (double)(Multi * OptionData_Calc[NowBeat_Calc].Option[2]) * DeffBPM_Calc / (double)OptionData_Calc[NowBeat_Calc].Option[1] / NowBPM_Calc;
-                }
-                MusicParam.BMSArr.Add(NowBMSCount_Calc);
-                NowBMSCount_Calc += (double)Multi * DeffBPM_Calc / (double)CalcMeasureLine_Calc[i] / NowBPM_Calc;
-            }
-        }
-    }
-    protected IEnumerator OffsetWaiter(float offset)
-    {
-        Debug.Log("StartWaiting!");
-        yield return new WaitForSeconds((float)MusicParam.Offset/1000);
-    }
-    /*void Start()
-    {
-        temp = MusicParam.Bpm;
-        MusicParam.DeffBPM = MusicParam.Bpm;
-        MusicParam.Bpm = 0;
-        try
-        {
-            while (BMSCount + Multi * 4 > MusicParam.BMSArr[NowBeat])
-            {
-                for (int j = 0; j < 12; j++)
-                {
-                    if (MusicParam.NoteList[NowBeat].NotesSet[j, 0] == 1)
-                    {
-                        GameObject.Find("NotesGenerator").GetComponent<NotesGenerator>().NotesGenarate(j, MusicParam.NoteList[NowBeat].NotesSet[j, 1], MusicParam.BMSArr[NowBeat]);
-                    }
-                    else if (MusicParam.NoteList[NowBeat].NotesSet[j, 0] == 2)
-                    {
-                        GameObject.Find("NotesGenerator").GetComponent<NotesGenerator>().LongGenerate(j, MusicParam.NoteList[NowBeat].NotesSet[j, 1], MusicParam.NoteList[NowBeat].NotesSet[j, 2], MusicParam.LongNotesList[LongCheckCount].StartLineCount, MusicParam.LongNotesList[LongCheckCount].EndLineCount);
-                        LongCheckCount++;
-                    }else if (MusicParam.NoteList[NowBeat].NotesSet[j, 0] == 3)
-                    {
-                        GameObject.Find("NotesGenerator").GetComponent<NotesGenerator>().FlickGenerate(j, MusicParam.NoteList[NowBeat].NotesSet[j, 1], MusicParam.NoteList[NowBeat].NotesSet[j, 2], MusicParam.BMSArr[NowBeat]);
-                    }
-                }
-                NowBeat++;
-            }
-        }
-        catch (ArgumentOutOfRangeException)
-        {
-            if (!endflag)
-            {
-                Debug.Log("EndNotes");
-            }
-            endflag = true;
-        }
-    }
-    // Update is called once per frame
-    void Update () {
-        FPS = 1f / Time.deltaTime;
-        if (Offset > MusicParam.Offset)
-        {
-            if (OffsetFlag == false)
-            {
-                OffsetFlag = true;
-                MusicParam.Bpm = temp;
-            }
-            try
-            {
-                while (BMSCount + Multi * 4 > MusicParam.BMSArr[NowBeat])
-                {
-                    for (int j = 0; j < 12; j++)
-                    {
-                        if (MusicParam.NoteList[NowBeat].NotesSet[j, 0] == 1)
-                        {
-                            GameObject.Find("NotesGenerator").GetComponent<NotesGenerator>().NotesGenarate(j, MusicParam.NoteList[NowBeat].NotesSet[j, 1], MusicParam.BMSArr[NowBeat]);
-                        }
-                        else if (MusicParam.NoteList[NowBeat].NotesSet[j, 0] == 2)
-                        {
-                            GameObject.Find("NotesGenerator").GetComponent<NotesGenerator>().LongGenerate(j, MusicParam.NoteList[NowBeat].NotesSet[j, 1], MusicParam.NoteList[NowBeat].NotesSet[j, 2], MusicParam.LongNotesList[LongCheckCount].StartLineCount, MusicParam.LongNotesList[LongCheckCount].EndLineCount);
-                            LongCheckCount++;
-                        }
-                    }
-                    NowBeat++;
-                }
 
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                if (!endflag)
-                {
-                    Debug.Log("EndNotes");
-                }
-                endflag = true;
-            }
-            BMSCount += Multi * (MusicParam.DeffBPM/ 60.0 / 4.0) / FPS;  //現在のBMSカウント
-        }else
-        {
-            Offset += Time.deltaTime*1000;
-        }
-        //BPM = 0
-        //遅延処理
-        //BPM = default
 
-    }*/
+
+    public static List<Musicnote> getMusicParam()
+    {
+        return MusicParam.NoteList;
+    }
+    public static double getBpm()
+    {
+        return MusicParam.Bpm;
+    }
 }

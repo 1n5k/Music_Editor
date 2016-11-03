@@ -21,13 +21,34 @@ public class Keyscroll : MonoBehaviour {
     private Vector3 v;
     private int one = 0;
     public static int maxcc = 1;
+    public static List<Musicnote> nakasio = new List<Musicnote>();
+    private List<Musicnote> list = new List<Musicnote>();
+    private Musicnote CCC = new Musicnote(); //slidenotes用のストック
 
     // Use this for initialization
     void Start () {
-        //マウスのロック
-       //Cursor.lockState = CursorLockMode.Locked;
-
+        i = 0;
+        count = 0;
+        one = 0;
+        cc = 1;
+        Ysum = 0;
         Ymove = -0.1f * 480;//1小節の大きさ
+        try
+        {
+            nakasio = GlobalValue.getMusicParam();
+            list = new List<Musicnote>(nakasio);
+            maxcc = list.Count / 48;
+        }
+        catch
+        {
+            for(int kal = 0;kal < 48; kal++)
+            {
+                list.Add(CCC);
+                CCC = new Musicnote();
+            }
+            maxcc = list.Count / 48;
+        }
+
     }
 
     // Update is called once per frame

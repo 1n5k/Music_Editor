@@ -9,7 +9,6 @@ using System.Text;
 using System.IO;
 using UnityEngine.UI;
 using System.Runtime.InteropServices;
-using UnityEditor;
 
 /*public class XMLLoader : MonoBehaviour {
     MusicData loadxml;
@@ -33,28 +32,28 @@ public class XMLWrite{
         }
         string[] tag =  {
             "<MusicData>",      "\n", 
-            "\t<TITLE>",          "</TITLE>\n",
-            "\t<SUBTITLE>",       "</SUBTITLE>\n",
-            "\t<ARTIST>",         "</ARTIST>\n",
-            "\t<BPM>",            "</BPM>\n",
-            "\t<JACKET>",         "</JACKET>\n",
-            "\t<MUSIC>",          "</MUSIC>\n",
-            "\t<DIFFCULTY>",      "\n", 
-            "\t\t<EASY>",         "</EASY>\n",
-            "\t\t<NORMAL>",       "</NORMAL>\n",
-            "\t\t<HARD>",         "</HARD>\n",
-            "\t\t<EXTRA>",       "</EXTRA>\n",
-            "\t</DIFFCULTY>",     "\n",
-            "\t<MOVIE>",          "</MOVIE>\n",
-            "\t<OFFSET>",         "</OFFSET>\n",
-            "\t<SELECTOFFSET>",   "</SELECTOFFSET>\n",
-            "\t<SELECTLONG>",     "</SELECTLONG>\n",
-            "\t<NOTES>",          "\n",
-            "\t\t<EASY>",         "\t\t</EASY>\n",
-            "\t\t<NORMAL>",       "\t\t</NORMAL>\n",
-            "\t\t<HARD>",         "\t\t</HARD>\n",
-            "\t\t<EXTRA>",       "\t\t</EXTRA>\n",
-            "\t</NOTES>",         "\n",
+            "  <TITLE>",          "</TITLE>\n",
+            "  <SUBTITLE>",       "</SUBTITLE>\n",
+            "  <ARTIST>",         "</ARTIST>\n",
+            "  <BPM>",            "</BPM>\n",
+            "  <JACKET>",         "</JACKET>\n",
+            "  <MUSIC>",          "</MUSIC>\n",
+            "  <DIFFCULTY>",      "\n", 
+            "    <EASY>",         "</EASY>\n",
+            "    <NORMAL>",       "</NORMAL>\n",
+            "    <HARD>",         "</HARD>\n",
+            "    <EXTRA>",       "</EXTRA>\n",
+            "  </DIFFCULTY>",     "\n",
+            "  <MOVIE>",          "</MOVIE>\n",
+            "  <OFFSET>",         "</OFFSET>\n",
+            "  <SELECTOFFSET>",   "</SELECTOFFSET>\n",
+            "  <SELECTLONG>",     "</SELECTLONG>\n",
+            "  <NOTES>",          "\n",
+            "    <EASY>",         "    </EASY>\n",
+            "    <NORMAL>",       "    </NORMAL>\n",
+            "    <HARD>",         "    </HARD>\n",
+            "    <EXTRA>",       "    </EXTRA>\n",
+            "  </NOTES>",         "\n",
             "</MusicData>",     "\n",
         };
         MusicData savedata = new MusicData();
@@ -68,9 +67,8 @@ public class XMLWrite{
             Directory.CreateDirectory("Score");
             String path = Directory.GetCurrentDirectory()+ @"\Score\" + scoresname; //保存するパスを取得
             Debug.Log(path);
-            
             XmlWriter writer = XmlWriter.Create(path);
-            savedata.Notes[0] = score;
+
             for (int i = 0; i < 48; i++)
             {
                 switch(i) {

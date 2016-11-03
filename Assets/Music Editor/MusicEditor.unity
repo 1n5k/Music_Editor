@@ -266,7 +266,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: a74e72d3ac3582341b696c18a82c1d60, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c72c43e81ccc3774280f09d6b9398dd7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -515,6 +515,8 @@ GameObject:
   - 33: {fileID: 415513449}
   - 23: {fileID: 415513448}
   - 114: {fileID: 415513447}
+  - 50: {fileID: 415513453}
+  - 61: {fileID: 415513452}
   m_Layer: 0
   m_Name: Slide
   m_TagString: Untagged
@@ -561,7 +563,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: c1c01228d2afe85459b5424e09463a69, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -617,6 +619,37 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 415513445}
+--- !u!61 &415513452
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 415513445}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_Offset: {x: -25, y: -2.5}
+  serializedVersion: 2
+  m_Size: {x: 14.66, y: 2.41}
+--- !u!50 &415513453
+Rigidbody2D:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 415513445}
+  m_UseAutoMass: 1
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &451781062
 GameObject:
   m_ObjectHideFlags: 0
@@ -1121,9 +1154,9 @@ MonoBehaviour:
   Notes: {fileID: 260040045}
   LongNotes: {fileID: 582806181}
   Slide: {fileID: 415513446}
-  Flick: {fileID: 0}
-  Left: {fileID: 0}
-  Right: {fileID: 0}
+  Flick: {fileID: 1073524501}
+  Left: {fileID: 21300000, guid: 4579ec3dd496e394daaf35204048be96, type: 3}
+  Right: {fileID: 21300000, guid: 69b235acabe147940854a0d2a21d629d, type: 3}
   Parent: {fileID: 1156073999}
   Des: {fileID: 1561307911}
   StopTime: {fileID: 1251921151}
@@ -1313,7 +1346,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c924eb2a420e7374290dbbdba6884106, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bf6b18b7b3002874b8cc5237ecb0af15, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
