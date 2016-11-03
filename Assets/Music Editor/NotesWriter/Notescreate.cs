@@ -94,7 +94,7 @@ public class Notescreate : MonoBehaviour {
     private int hakucount = 0;
 
     string print_array = "";
-
+    XMLWrite writer = new XMLWrite();
     private int ClacBeat = 0;
     private int mea = 0;
 
@@ -223,77 +223,7 @@ public class Notescreate : MonoBehaviour {
             optiontap = 2;
         }
 
-        /*//stoptime用の入力
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            optiontap = 1;
-        }*/
-
-        /*// 停止時間
-        if (capsel.OPTION[0] == 1 && optiontap == 1)      //すでに存在していて押したら
-        {
-            copyDes = (GameObject)Instantiate(Des, new Vector3(-510, (cc * -480) + 345 + mymove, 0), Quaternion.identity);
-            copyDes.transform.SetParent(Parent, false);
-            for (int d = 0; d < 3; d++)
-            {
-                capsel.OPTION[d] = 0;
-            }
-            optiontap = -1;
-            stoptap = -1;
-            
-            //destory
-        }
-
-        if (optiontap == 1 && stoptap < 0 && changetap < 0)              //何もなく押したら
-        {
-            if (capsel.OPTION[1] != 0)
-            {
-                stoptime = capsel.OPTION[1];
-            }
-            stoptap = optiontap;
-            stopcopy = (RectTransform)Instantiate(StopTime, new Vector3(-510, (cc * -480) + 345 + mymove, 0), Quaternion.identity);
-            stopcopy.transform.Rotate(0, 0, 180);
-            stopcopy.GetComponent<Text>().text = "   停止\n_" + stoptime + "拍×" + risum[bunsu] + "分";
-            stopcopy.transform.SetParent(Parent, false);
-            capsel.OPTION[0] = 1;
-            capsel.OPTION[1] = stoptime;
-            capsel.OPTION[2] = risum[bunsu];
-            optiontap = 0;
-            updownstop = 0;
-        }
-
-        if (stoptap == 1 && optiontap == 2)               //押しててChangeの方を押したら
-        {
-            copyDes = (GameObject)Instantiate(Des, stopcopy.localPosition, Quaternion.identity);
-            copyDes.transform.SetParent(Parent, false);
-            for (int d = 0; d < 3; d++)
-            {
-                capsel.OPTION[d] = 0;
-            }
-            optiontap = -1;
-            stoptap = -1;
-            //Destroy
-        }
-
-        if (Input.GetKeyDown(KeyCode.Y) && stoptap == 1)
-        {
-            updownstop -= 1;
-            if (stoptime + updownstop < 0)
-            {
-                updownstop = -stoptime;
-            }
-            capsel.OPTION[1] = stoptime + updownstop;
-            capsel.OPTION[2] = risum[bunsu];
-            stopcopy.GetComponent<Text>().text = "   停止\n_" + (stoptime + updownstop) + "拍×" + risum[bunsu] + "分";
-        }
-        if (Input.GetKeyDown(KeyCode.I) && stoptap == 1)
-        {
-            updownstop += 1;
-            capsel.OPTION[1] = stoptime + updownstop;
-            capsel.OPTION[2] = risum[bunsu];
-            stopcopy.GetComponent<Text>().text = "   停止\n_" + (stoptime + updownstop) + "拍×" + risum[bunsu] + "分";
-        }*/
-
+        
 
         //変則値
         if (capsel.OPTION[0] == 2 && optiontap == 2)      //すでに存在していて押したら

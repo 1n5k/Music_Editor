@@ -163,7 +163,7 @@ public class GlobalValue : MonoBehaviour
                     {
                         //MusicParam.NoteList[l].Option[k] = ConvertStringToInt(ref i,analyze);
                         buff.Option[k] = ConvertStringToInt(ref i,analyze);
-                        //Debug.Log(buff.Option[k]);
+                       // Debug.Log("k is "+k);
                         
                         k++;
                         k %= 3;

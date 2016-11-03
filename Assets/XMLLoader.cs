@@ -35,7 +35,7 @@ public class XMLLoader : MonoBehaviour
 
     static Boolean DifficultyChecker = false;
     static Boolean NotesChecker = false;
-    static MusicData LoadedData;
+    public static MusicData LoadedData = new MusicData();
     // Use this for initialization
     public InputField addr;
 
@@ -47,31 +47,31 @@ public class XMLLoader : MonoBehaviour
         Debug.Log("inputfield addr is "+EditFile);
         EditFile = @"D:\Music_Editor\Score\NightOfKnights.xml";//OpenFile.text;
 
-        Debug.Log(EditFile[0]);
-
         FileStream fs = null;
         XmlReader xmlReader = null;
         XmlReaderSettings settings = null;
         string Listener = "";
-        LoadedData = new MusicData();
+        
         try
         {
             Debug.Log(EditFile + "を読み込みます\r\n");
             fs = new FileStream(EditFile, FileMode.Open);
-
+            Debug.Log("a");
             settings = new XmlReaderSettings();
             settings.IgnoreComments = true;
             settings.IgnoreWhitespace = true;
 
             xmlReader = XmlReader.Create(fs, settings);
-
+            Debug.Log("b");
+            Debug.Break();
             while (xmlReader.Read() == true)
             {
                 XmlNodeType nType = xmlReader.NodeType;
                 //Debug.Log("NodeType: " + nType.ToString() + "\r\n");
-               // Debug.Log("LocalName: " + xmlReader.LocalName + "\r\n");
+                // Debug.Log("LocalName: " + xmlReader.LocalName + "\r\n");
                 //Debug.Log("Depth: " + Convert.ToString(xmlReader.Depth) + "\r\n");
                 //Debug.Log("Name: " + xmlReader.Name + "\r\n");
+               // Debug.Log("c");
                 if (xmlReader.Name != "" && xmlReader != null && nType == XmlNodeType.Element)
                 {
                     Listener = xmlReader.Name;
@@ -103,14 +103,17 @@ public class XMLLoader : MonoBehaviour
                
             }
 
-            for (int n=0;n < 4;n++){
-                
-                if (LoadedData.Notes[n] != null)
-                {
-                   // Debug.Log("Notes found: "+n);
-                    NotesPadding(ref LoadedData.Notes[n]);
-                }
+
+
+            if (LoadedData.Notes[DiffChoice.diff] != null)
+            { 
+                NotesPadding(ref LoadedData.Notes[DiffChoice.diff]);
             }
+            else
+            {
+                Debug.Log("春風亭昇太");
+            }
+            
         }
         catch (Exception exc)
         {
@@ -130,6 +133,10 @@ public class XMLLoader : MonoBehaviour
         }
     }
 
+    public double getBPM()
+    {
+        return LoadedData.Bpm;
+    }
     public void Update()
     {
         
@@ -169,30 +176,70 @@ public class XMLLoader : MonoBehaviour
                 int intrvl = n - m;
                 switch (intrvl)
                 {
+                    case 4:
+                        for (; m < n; m++)
+                        {
+                            if (m != n - 1)
+                            {
+                                for (int k = 0; k < 11; k++)
+                                {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len - 1, pad);
+
+                                }
+                            }
+                            else
+                            {
+                                for (int k = 0; k < 11; k++)
+                                {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len - 1, pad);
+                                }
+                            }
+                        }
+                        break;
                     case 8:
                         for (; m < n; m++)
                         {
                             if (m != n - 1)
                             {
-                                for (int k = 0; k < 5; k++) {
+                                for (int k = 0; k < 5; k++)
+                                {
                                     int len = divscore[m].Length;
-                                    divscore[m] = divscore[m].Insert(len-1, pad);
-                                    //Debug.Log("divscore[m] is" + divscore[m]);
-                                    //score = string.Join("", divscore[m]);
+                                    divscore[m] = divscore[m].Insert(len - 1, pad);
+
                                 }
-                               
-                                //log.WriteLine(divscore[m]);
                             }
                             else
                             {
                                 for (int k = 0; k < 5; k++)
                                 {
                                     int len = divscore[m].Length;
-                                    divscore[m] = divscore[m].Insert(len-1, pad);
+                                    divscore[m] = divscore[m].Insert(len - 1, pad);
                                 }
-                                //log.WriteLine(divscore[m]);
                             }
-                            
+                        }
+                        break;
+                    case 12:
+                        for (; m < n; m++)
+                        {
+                            if (m != n - 1)
+                            {
+                                for (int k = 0; k < 3; k++)
+                                {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len - 1, pad);
+
+                                }
+                            }
+                            else
+                            {
+                                for (int k = 0; k < 3; k++)
+                                {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len - 1, pad);
+                                }
+                            }
                         }
                         break;
                     case 16:
@@ -205,7 +252,6 @@ public class XMLLoader : MonoBehaviour
                                     int len = divscore[m].Length;
                                     divscore[m] = divscore[m].Insert(len-1, pad);
                                 }
-                                //log.WriteLine(divscore[m]);
                             }
                             else
                             {
@@ -214,18 +260,38 @@ public class XMLLoader : MonoBehaviour
                                     int len = divscore[m].Length;
                                     divscore[m] = divscore[m].Insert(len-1, pad);
                                 }
-                                //log.WriteLine(divscore[m]);
                             }
                             
                         }
-                            break;
+                        break;
+                    case 24:
+                        for (; m < n; m++)
+                        {
+                            if (m != n - 1)
+                            {
+                                for (int k = 0; k < 1; k++)
+                                {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len - 1, pad);
+
+                                }
+                            }
+                            else
+                            {
+                                for (int k = 0; k < 1; k++)
+                                {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len - 1, pad);
+                                }
+                            }
+                        }
+                        break;
                 }
                 m = i + 1;
                 
             }
             
         }
-        //string padednotes = string.Join("\n", divscore);
         StringBuilder padednotes = new StringBuilder( string.Join("\n", divscore) );
         send = padednotes.ToString();
         

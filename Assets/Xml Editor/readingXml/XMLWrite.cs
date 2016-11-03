@@ -19,9 +19,18 @@ using UnityEditor;
     }
 }*/
 public class XMLWrite{
+    String scoresname;
     public Boolean Write(ref string score)
     {
-        String scores = "score.xml";
+        if (XMLLoader.LoadedData.Title != null)
+        {
+
+            scoresname = XMLLoader.LoadedData.Title + ".xml";
+        }
+        else
+        {
+            scoresname = "score.xml";
+        }
         string[] tag =  {
             "<MusicData>",      "\n", 
             "\t<TITLE>",          "</TITLE>\n",
@@ -49,13 +58,15 @@ public class XMLWrite{
             "</MusicData>",     "\n",
         };
         MusicData savedata = new MusicData();
+        savedata = XMLLoader.LoadedData;
+        savedata.Notes[DiffChoice.diff] = score;
         try
         {
             
             Debug.Log(Directory.GetCurrentDirectory()); //デバッグ用
 
             Directory.CreateDirectory("Score");
-            String path = Directory.GetCurrentDirectory()+ @"\Score\" + scores; //保存するパスを取得
+            String path = Directory.GetCurrentDirectory()+ @"\Score\" + scoresname; //保存するパスを取得
             Debug.Log(path);
             
             XmlWriter writer = XmlWriter.Create(path);
