@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MusicData
 {
@@ -112,6 +113,7 @@ public class XMLLoader : MonoBehaviour
             else
             {
                 Debug.Log("春風亭昇太");
+                SceneManager.LoadScene("MusicEditor");
             }
             
         }
