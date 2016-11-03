@@ -9,16 +9,16 @@ using System.Text;
 using System.IO;
 using UnityEngine.UI;
 using System.Xml.Serialization;
+using UnityEngine.SceneManagement;
 
 
 
-public class NotesStore{
 
-    public int[,] NOTES = new int[12, 5];
-    public int[] OPTION = new int[3];
-}
+
 
 public class Notescreate : MonoBehaviour {
+
+    public static List<Musicnote> nakasio = new List<Musicnote>();
 
     public RectTransform Notes;                         //単ノーツのコピー元
     public RectTransform LongNotes;                     //ロングノーツのコピー元
@@ -37,15 +37,15 @@ public class Notescreate : MonoBehaviour {
     private int[] risum = { 4, 8, 12, 16, 24, 32, 48 }; //分数の値
     private int input;                                  //キー入力の値
 
-    private int optiontap = -1;
+    private int  Optiontap = -1;
     private int changetap = -1;
     private int stoptap = -1;
 
     public static int mag = 1;                          //ノーツの幅
     private int stoptime;
     private int updownstop = 0;
-    private int startBPM = 0;                             //xmlデータから読み込み引っ張ってくる
-    private int change;
+    private double startBPM = 0;                             //xmlデータから読み込み引っ張ってくる
+    private double change;
     private int updownBPM = 0;
     private int magsize;                                //レーン横幅の上限を越えないための天井値
 
@@ -78,11 +78,11 @@ public class Notescreate : MonoBehaviour {
     GameObject copyDes;
     public Boolean yes = false;
     //List構造体
-    public List<NotesStore> list = new List<NotesStore>();
-    public NotesStore capsel = new NotesStore();
-    public NotesStore None = new NotesStore(); //初期化用
-    public NotesStore LongStock = new NotesStore(); //Londnotesのストック
-    public NotesStore SlideStock = new NotesStore(); //slidenotes用のストック
+    public List<Musicnote> list = new List<Musicnote>();
+    public Musicnote capsel = new Musicnote();
+    public Musicnote None = new Musicnote(); //初期化用
+    public Musicnote LongStock = new Musicnote(); //Londnotesのストック
+    public Musicnote SlideStock = new Musicnote(); //slidenotes用のストック
 
     public List<int> delete = new List<int>();
     private int savehaku = 0;
@@ -94,7 +94,7 @@ public class Notescreate : MonoBehaviour {
     private int hakucount = 0;
 
     string print_array = "";
-
+    XMLWrite writer = new XMLWrite();
     private int ClacBeat = 0;
     private int mea = 0;
 
@@ -107,37 +107,129 @@ public class Notescreate : MonoBehaviour {
         LongWH = v;
 
         //stoptime = 0;
+        Debug.Log("春風亭翔太");
+        //渡し
+        try
+        {
+            List<Musicnote> nakasio = GlobalValue.getMusicParam();
+            list = new List<Musicnote>(nakasio);
 
-        startBPM = 220;   //xmlデータから読み込み引っ張ってくる
-        change = startBPM;
+            startBPM = GlobalValue.getBpm();
+            Debug.Log(startBPM);
+            change = startBPM;
+            //0小節
+            measure.Add(0);
+            maxcc = Keyscroll.getmaxcc(); //最大小節
 
-        //0小節
-        measure.Add(0);
+            for (int www = 0; www < maxcc; www++)
+            {
+                measure.Add(48);
+            }
+
+            if (list.Count != 0)
+            {
+
+                for (int h = 1; h <= maxcc; h++)
+                {
+                    ClacBeat = 0;
+                    for (int b = 0; b < h; b++)
+                    {
+                        ClacBeat += measure[b];
+                    }
+                    for (int e = ClacBeat; e < 48 + ClacBeat; e++)
+                    {
+                        if (list[e].Option[0] != 0)
+                        {
+                            change = list[e].Option[1];
+                            changecopy = (RectTransform)Instantiate(changeBPM, new Vector3(330, -135 - (e * 10), 0), Quaternion.identity);
+                            changecopy.transform.Rotate(0, 0, 180);
+                            changecopy.GetComponent<Text>().text = "BPM\n" + change + "      _";
+                            changecopy.transform.SetParent(Parent, false);
+                        }
+
+                        for (int j = 0; j < 12; j++)
+                        {
+                            if (list[e].NotesSet[j, 0] == 1)
+                            {
+                                copy = (RectTransform)Instantiate(Notes, new Vector3(298 - (54 * j), -114 - (e * 10), -1.01f), Quaternion.identity);
+                                WH.x = v.x * list[e].NotesSet[j, 1];
+                                copy.sizeDelta = WH;
+                                copy.transform.SetParent(Parent, false);
+
+                            }
+                            if (list[e].NotesSet[j, 0] == 2)
+                            {
+                                slidecopy = (RectTransform)Instantiate(Slide, new Vector3(298 - (54 * j), -114 - (e * 10), -1.01f), Quaternion.identity);
+                                WH.x = v.x * list[e].NotesSet[j, 1];
+                                slidecopy.sizeDelta = WH;
+                                slidecopy.transform.SetParent(Parent, false);
+
+                                slidecopy.GetComponent<SlideCreate>().Slider(54 * (j - list[e].NotesSet[j, 2] - 1), list[e].NotesSet[j, 4] * (490 / list[e].NotesSet[j, 3]), list[e].NotesSet[j, 1]);
+
+                            }
+                            if (list[e].NotesSet[j, 0] == 3)
+                            {
+                                flickcopy = (RectTransform)Instantiate(Flick, new Vector3(298 - (54 * j), -114 - (e * 10), -1), Quaternion.identity);
+                                WH.x = v.x * list[e].NotesSet[j, 1];
+                                flickcopy.sizeDelta = WH;
+                                flickcopy.transform.SetParent(Parent, false);
+
+                                if (list[e].NotesSet[j, 2] == 0)
+                                {
+                                    flickcopy.GetComponent<Image>().sprite = Left;
+
+                                }
+                                if (list[e].NotesSet[j, 2] == 1)
+                                {
+                                    flickcopy.GetComponent<Image>().sprite = Right;
+                                }
+                            }
+                        }
+                    }
+                }
+                WH = v;
+                capsel = list[0];
+            }
+        }
+        catch
+        {
+            startBPM = 150;
+            Debug.Log(startBPM);
+            change = startBPM;
+            measure.Add(0);
+            for (int kal = 0; kal < 48; kal++)
+            {
+                list.Add(None);
+                None = new Musicnote();
+            }
+            maxcc = Keyscroll.getmaxcc();
+        }
+
+
 
     }
 
-
     void Update() {
+
         mymove = 10 * Keyscroll.getYsum();//バーに追従する移動量
         bunsu = Keyscroll.geti(); //○分の配列管理
         cc = Keyscroll.getcc(); //現在いる小節
         maxcc = Keyscroll.getmaxcc(); //最大小節
         Debug.Log(mymove);
-        
 
         //新しい小節の長さ決めと初期化
         if (max < maxcc)
         {
             Beat = 0;
             measure.Add(48);
-            for (int a = 0; a <= maxcc; a++)
+            for (int a = 1; a <= maxcc; a++)
             {
                 Beat += measure[a];
             }
             for (int h = measure[max]; h < Beat; h++)
             {
                 list.Add(None);
-                None = new NotesStore();
+                None = new Musicnote();
             }
             max = maxcc;
         }
@@ -161,9 +253,10 @@ public class Notescreate : MonoBehaviour {
                 copyDes.transform.SetParent(Parent, false);
                 for (int d = 0; d < 3; d++)
                 {
-                    capsel.OPTION[d] = 0;
+                    capsel. Option[d] = 0;
                 }
             }*/
+
 
             if (changetap == 2 && updownBPM == 0)
             {
@@ -172,7 +265,7 @@ public class Notescreate : MonoBehaviour {
                 copyDes.transform.SetParent(Parent, false);
                 for (int d = 0; d < 3; d++)
                 {
-                    capsel.OPTION[d] = 0;
+                    capsel. Option[d] = 0;
                 }
             }
 
@@ -185,14 +278,15 @@ public class Notescreate : MonoBehaviour {
             changetap = -1;
 
             list[hakucount] = capsel;
-            capsel = new NotesStore();
+            capsel = new Musicnote();
             capsel = list[haku];
             hakucount = haku;
+
         }
 
         input = -1;
         magsize = 0;
-        optiontap = -1;
+         Optiontap = -1;
 
 
         //ノーツの幅変更
@@ -220,57 +314,57 @@ public class Notescreate : MonoBehaviour {
         //changeBPM用の入力
         if (Input.GetKeyDown(KeyCode.R))
         {
-            optiontap = 2;
+             Optiontap = 2;
         }
 
         /*//stoptime用の入力
         if (Input.GetKeyDown(KeyCode.U))
         {
-            optiontap = 1;
+             Optiontap = 1;
         }*/
 
         /*// 停止時間
-        if (capsel.OPTION[0] == 1 && optiontap == 1)      //すでに存在していて押したら
+        if (capsel. Option[0] == 1 &&  Optiontap == 1)      //すでに存在していて押したら
         {
             copyDes = (GameObject)Instantiate(Des, new Vector3(-510, (cc * -480) + 345 + mymove, 0), Quaternion.identity);
             copyDes.transform.SetParent(Parent, false);
             for (int d = 0; d < 3; d++)
             {
-                capsel.OPTION[d] = 0;
+                capsel. Option[d] = 0;
             }
-            optiontap = -1;
+             Optiontap = -1;
             stoptap = -1;
             
             //destory
         }
 
-        if (optiontap == 1 && stoptap < 0 && changetap < 0)              //何もなく押したら
+        if ( Optiontap == 1 && stoptap < 0 && changetap < 0)              //何もなく押したら
         {
-            if (capsel.OPTION[1] != 0)
+            if (capsel. Option[1] != 0)
             {
-                stoptime = capsel.OPTION[1];
+                stoptime = capsel. Option[1];
             }
-            stoptap = optiontap;
+            stoptap =  Optiontap;
             stopcopy = (RectTransform)Instantiate(StopTime, new Vector3(-510, (cc * -480) + 345 + mymove, 0), Quaternion.identity);
             stopcopy.transform.Rotate(0, 0, 180);
             stopcopy.GetComponent<Text>().text = "   停止\n_" + stoptime + "拍×" + risum[bunsu] + "分";
             stopcopy.transform.SetParent(Parent, false);
-            capsel.OPTION[0] = 1;
-            capsel.OPTION[1] = stoptime;
-            capsel.OPTION[2] = risum[bunsu];
-            optiontap = 0;
+            capsel. Option[0] = 1;
+            capsel. Option[1] = stoptime;
+            capsel. Option[2] = risum[bunsu];
+             Optiontap = 0;
             updownstop = 0;
         }
 
-        if (stoptap == 1 && optiontap == 2)               //押しててChangeの方を押したら
+        if (stoptap == 1 &&  Optiontap == 2)               //押しててChangeの方を押したら
         {
             copyDes = (GameObject)Instantiate(Des, stopcopy.localPosition, Quaternion.identity);
             copyDes.transform.SetParent(Parent, false);
             for (int d = 0; d < 3; d++)
             {
-                capsel.OPTION[d] = 0;
+                capsel. Option[d] = 0;
             }
-            optiontap = -1;
+             Optiontap = -1;
             stoptap = -1;
             //Destroy
         }
@@ -282,65 +376,60 @@ public class Notescreate : MonoBehaviour {
             {
                 updownstop = -stoptime;
             }
-            capsel.OPTION[1] = stoptime + updownstop;
-            capsel.OPTION[2] = risum[bunsu];
+            capsel. Option[1] = stoptime + updownstop;
+            capsel. Option[2] = risum[bunsu];
             stopcopy.GetComponent<Text>().text = "   停止\n_" + (stoptime + updownstop) + "拍×" + risum[bunsu] + "分";
         }
         if (Input.GetKeyDown(KeyCode.I) && stoptap == 1)
         {
             updownstop += 1;
-            capsel.OPTION[1] = stoptime + updownstop;
-            capsel.OPTION[2] = risum[bunsu];
+            capsel. Option[1] = stoptime + updownstop;
+            capsel. Option[2] = risum[bunsu];
             stopcopy.GetComponent<Text>().text = "   停止\n_" + (stoptime + updownstop) + "拍×" + risum[bunsu] + "分";
         }*/
 
 
         //変則値
-        if (capsel.OPTION[0] == 2 && optiontap == 2)      //すでに存在していて押したら
+        if (capsel. Option[0] == 2 &&  Optiontap == 2)      //すでに存在していて押したら
         {
-            copyDes = (GameObject)Instantiate(Des, new Vector3(330, (cc * -480) + 345 + mymove, 0), Quaternion.identity);
+            copyDes = (GameObject)Instantiate(Des, new Vector3(330, (cc * -480) + 345 + mymove, -1.01f), Quaternion.identity);
             copyDes.transform.SetParent(Parent, false);
             for (int d = 0; d < 3; d++)
             {
-                capsel.OPTION[d] = 0;
+                capsel. Option[d] = 0;
             }
-            optiontap = -1;
+             Optiontap = -1;
             changetap = -1;
             updownBPM = 0;
             //destory
         }
 
-        if (optiontap == 2 && changetap < 0)              //何もなく押したら
+        if ( Optiontap == 2 && changetap < 0)              //何もなく押したら
         {
-            if (capsel.OPTION[1] != 0)
+            if (capsel. Option[1] != 0)
             {
-                change = capsel.OPTION[1];
+                change = capsel. Option[1];
             }
-            Debug.Log("changecopy1 is "+changecopy);
-            changetap = optiontap;
-            changecopy = (RectTransform)Instantiate(changeBPM, new Vector3(330, (cc * -480) + 345 + mymove, 0), Quaternion.identity);
-            Debug.Log("changecopy2 is " + changecopy);
+            changetap =  Optiontap;
+            changecopy = (RectTransform)Instantiate(changeBPM, new Vector3(330, (cc * -480) + 345 + mymove, -1.01f), Quaternion.identity);
             changecopy.transform.Rotate(0,0,180);
-            Debug.Log("changecopy3 is " + changecopy);
             changecopy.GetComponent<Text>().text = "BPM\n" + change + "      _";
-            Debug.Log("changecopy4 is " + changecopy);
             changecopy.transform.SetParent(Parent, false);
-            Debug.Log("changecopy5 is " + changecopy);
-            capsel.OPTION[0] = 2;
-            capsel.OPTION[1] = change;
-            optiontap = 0;
+            capsel. Option[0] = 2;
+            capsel. Option[1] = (int)change;
+             Optiontap = 0;
             updownBPM = 0;
         }
 
-        /*if(changetap == 2 && optiontap == 1)               //押しててStopの方を押したら
+        /*if(changetap == 2 &&  Optiontap == 1)               //押しててStopの方を押したら
         {
             copyDes = (GameObject)Instantiate(Des, changecopy.localPosition, Quaternion.identity);
             copyDes.transform.SetParent(Parent, false);
             for (int d = 0; d < 3; d++)
             {
-                capsel.OPTION[d] = 0;
+                capsel. Option[d] = 0;
             }
-            optiontap = -1;
+             Optiontap = -1;
             changetap = -1;
             //Destroy
         }*/
@@ -350,15 +439,15 @@ public class Notescreate : MonoBehaviour {
             updownBPM -= 1;
             if (change + updownBPM <= 0)
             {
-                updownBPM = 1 - change;
+                updownBPM = 1 - (int)change;
             }
-            capsel.OPTION[1] = change + updownBPM;
+            capsel. Option[1] = (int)change + updownBPM;
             changecopy.GetComponent<Text>().text = "BPM\n" + (change + updownBPM) + "      _";
         }
         if (Input.GetKeyDown(KeyCode.T) && changetap == 2)
         {
             updownBPM += 1;
-            capsel.OPTION[1] = change + updownBPM;
+            capsel. Option[1] = (int)change + updownBPM;
             changecopy.GetComponent<Text>().text = "BPM\n" + (change + updownBPM) + "      _";
         }
 
@@ -482,13 +571,13 @@ public class Notescreate : MonoBehaviour {
         //デストロイヤー君の移動
         if(input >= 0)
         {
-            if (capsel.NOTES[input, 0] != 0)
+            if (capsel.NotesSet[input, 0] != 0)
             {
-                copyDes = (GameObject)Instantiate(Des, new Vector3(270 - (54 * input), (cc * -480) + 363 + mymove, 0), Quaternion.identity);
+                copyDes = (GameObject)Instantiate(Des, new Vector3(270 - (54 * input), (cc * -480) + 363 + mymove, -1.01f), Quaternion.identity);
                 copyDes.transform.SetParent(Parent, false);
                 for (int d = 0; d < 5; d++)
                 {
-                    capsel.NOTES[input, d] = 0;
+                    capsel.NotesSet[input, d] = 0;
                 }
                 input = -1;
                 longtap = -1;
@@ -506,13 +595,13 @@ public class Notescreate : MonoBehaviour {
         {
             longtap = input;
             starthaku = haku;
-            longcopy = (RectTransform)Instantiate(LongNotes, new Vector3(298 - (54 * input), (cc * -480) + 366 + mymove, 0), Quaternion.identity);
+            longcopy = (RectTransform)Instantiate(LongNotes, new Vector3(298 - (54 * input), (cc * -480) + 366 + mymove, -1.01f), Quaternion.identity);
             longcopy.sizeDelta = LongWH;
             longcopy.transform.SetParent(Parent, false);
-            LongStock.NOTES = capsel.NOTES;
+            LongStock.NotesSet = capsel.NotesSet;
 
-            LongStock.NOTES[longtap, 0] = 2;
-            LongStock.NOTES[longtap, 1] = mag;
+            LongStock.NotesSet[longtap, 0] = 2;
+            LongStock.NotesSet[longtap, 1] = mag;
             input = -1;
         }
         if(longtap >= 0 && Input.GetKey(KeyCode.LeftShift))
@@ -531,12 +620,12 @@ public class Notescreate : MonoBehaviour {
         {
             if(updown <= 0)
             {
-                copyDes = (GameObject)Instantiate(Des, longcopy.localPosition + new Vector3(-20 ,-4 , 0 ), Quaternion.identity);
+                copyDes = (GameObject)Instantiate(Des, longcopy.localPosition + new Vector3(-20 ,-4 , -1.01f), Quaternion.identity);
                 copyDes.transform.SetParent(Parent, false);
                 for (int d = 0; d < 5; d++)
                 {
-                    LongStock.NOTES[longtap, d] = 0;
-                    list[starthaku].NOTES = LongStock.NOTES;
+                    LongStock.NotesSet[longtap, d] = 0;
+                    list[starthaku].NotesSet = LongStock.NotesSet;
                 }
             }
             else
@@ -544,10 +633,10 @@ public class Notescreate : MonoBehaviour {
                 LongWH.y = v.y +(updown * 490 / risum[bunsu]);
                 longcopy.sizeDelta = LongWH;
 
-                LongStock.NOTES[longtap, 2] = longtap + 1;
-                LongStock.NOTES[longtap, 3] = risum[bunsu];
-                LongStock.NOTES[longtap, 4] = updown;
-                list[starthaku].NOTES = LongStock.NOTES;
+                LongStock.NotesSet[longtap, 2] = longtap + 1;
+                LongStock.NotesSet[longtap, 3] = risum[bunsu];
+                LongStock.NotesSet[longtap, 4] = updown;
+                list[starthaku].NotesSet = LongStock.NotesSet;
             }
             longtap = -1;
             input = -1;
@@ -564,10 +653,10 @@ public class Notescreate : MonoBehaviour {
             slidecopy = (RectTransform)Instantiate(Slide, new Vector3(298 - (54 * input), (cc * -480) + 366 + mymove, -1), Quaternion.identity);
             slidecopy.sizeDelta = LongWH;
             slidecopy.transform.SetParent(Parent, false);
-            SlideStock.NOTES = capsel.NOTES;
+            SlideStock.NotesSet = capsel.NotesSet;
 
-            SlideStock.NOTES[Slidefirsttap, 0] = 2;
-            SlideStock.NOTES[Slidefirsttap, 1] = mag;
+            SlideStock.NotesSet[Slidefirsttap, 0] = 2;
+            SlideStock.NotesSet[Slidefirsttap, 1] = mag;
             input = -1;
         }
         if (Slidefirsttap >= 0 && Input.GetKey(KeyCode.RightShift))
@@ -588,8 +677,8 @@ public class Notescreate : MonoBehaviour {
             copyDes.transform.SetParent(Parent, false);
             for (int d = 0; d < 5; d++)
             {
-                SlideStock.NOTES[Slidefirsttap, d] = 0;
-                list[starthaku].NOTES = SlideStock.NOTES;
+                SlideStock.NotesSet[Slidefirsttap, d] = 0;
+                list[starthaku].NotesSet = SlideStock.NotesSet;
             }
             Slidefirsttap = -1;
             input = -1;
@@ -605,18 +694,18 @@ public class Notescreate : MonoBehaviour {
                 copyDes.transform.SetParent(Parent, false);
                 for (int d = 0; d < 5; d++)
                 {
-                    SlideStock.NOTES[Slidefirsttap, d] = 0;
-                    list[starthaku].NOTES = SlideStock.NOTES;
+                    SlideStock.NotesSet[Slidefirsttap, d] = 0;
+                    list[starthaku].NotesSet = SlideStock.NotesSet;
                 }
             }
             else
             {
-                slidecopy.GetComponent<SlideCreate>().Slider(54 * (Slidefirsttap - Slidesecondtap), updown * (490 / risum[bunsu]));
+                slidecopy.GetComponent<SlideCreate>().Slider(54 * (Slidefirsttap - Slidesecondtap), updown * (490 / risum[bunsu]),mag);
 
-                SlideStock.NOTES[Slidefirsttap, 2] = Slidesecondtap + 1;
-                SlideStock.NOTES[Slidefirsttap, 3] = risum[bunsu];
-                SlideStock.NOTES[Slidefirsttap, 4] = updown;
-                list[starthaku].NOTES = SlideStock.NOTES;
+                SlideStock.NotesSet[Slidefirsttap, 2] = Slidesecondtap + 1;
+                SlideStock.NotesSet[Slidefirsttap, 3] = risum[bunsu];
+                SlideStock.NotesSet[Slidefirsttap, 4] = updown;
+                list[starthaku].NotesSet = SlideStock.NotesSet;
             }
             Slidefirsttap = -1;
             Slidesecondtap = -1;
@@ -628,21 +717,21 @@ public class Notescreate : MonoBehaviour {
         if (input >= 0 && Input.GetKey(KeyCode.Space) && Input.GetKey(KeyCode.RightShift) != true && Input.GetKey(KeyCode.LeftShift) != true && flicktap < 0)
         {
             flicktap = input;
-            flickcopy = (RectTransform)Instantiate(Flick, new Vector3(298 - (54 * input), (cc * -480) + 366 + mymove, -1), Quaternion.identity);
+            flickcopy = (RectTransform)Instantiate(Flick, new Vector3(298 - (54 * input), (cc * -480) + 366 + mymove, -1.01f), Quaternion.identity);
             flickcopy.sizeDelta = WH;
             flickcopy.transform.SetParent(Parent, false);
-            capsel.NOTES[flicktap, 0] = 3;
-            capsel.NOTES[flicktap, 1] = mag;
+            capsel.NotesSet[flicktap, 0] = 3;
+            capsel.NotesSet[flicktap, 1] = mag;
 
             input = -1;
         }
         if (flicktap >= 0 && Input.GetKeyUp(KeyCode.Space))
         {
-            copyDes = (GameObject)Instantiate(Des, flickcopy.localPosition + new Vector3(-20, -4, -1), Quaternion.identity);
+            copyDes = (GameObject)Instantiate(Des, flickcopy.localPosition + new Vector3(-20, -4, -1.01f), Quaternion.identity);
             copyDes.transform.SetParent(Parent, false);
             for (int d = 0; d < 5; d++)
             {
-                capsel.NOTES[flicktap, d] = 0;
+                capsel.NotesSet[flicktap, d] = 0;
             }
             flicktap = -1;
             input = -1;
@@ -654,7 +743,7 @@ public class Notescreate : MonoBehaviour {
             {
                 //画像を張り替える
                 flickcopy.GetComponent<Image>().sprite = Left;
-                capsel.NOTES[flicktap, 2] = 0 ;
+                capsel.NotesSet[flicktap, 2] = 0 ;
 
                 flicktap = -1;
                 input = -1;
@@ -662,7 +751,7 @@ public class Notescreate : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Period))
             {
                 flickcopy.GetComponent<Image>().sprite = Right;
-                capsel.NOTES[flicktap, 2] = 1;
+                capsel.NotesSet[flicktap, 2] = 1;
 
                 flicktap = -1;
                 input = -1;
@@ -672,11 +761,11 @@ public class Notescreate : MonoBehaviour {
         //数値化された入力で単ノーツ生成
         if (input >= 0)
         {
-            copy = (RectTransform)Instantiate(Notes, new Vector3(298 - (54 * input), (cc * -480) + 366 + mymove, 0), Quaternion.identity);
+            copy = (RectTransform)Instantiate(Notes, new Vector3(298 - (54 * input), (cc * -480) + 366 + mymove, -1.01f), Quaternion.identity);
             copy.sizeDelta = WH;
             copy.transform.SetParent(Parent, false);
-            capsel.NOTES[input, 0] = 1;
-            capsel.NOTES[input, 1] = mag;
+            capsel.NotesSet[input, 0] = 1;
+            capsel.NotesSet[input, 1] = mag;
         }
 
 
@@ -685,10 +774,9 @@ public class Notescreate : MonoBehaviour {
         //出力チェック&セーブ機能
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            mea = 0;
             print_array = "";
             list[haku] = capsel;
-            List<NotesStore> listsave = new List<NotesStore>(list);
+            List<Musicnote> listsave = new List<Musicnote>(list);
             for (int h = 1; h <= maxcc; h++)
             {
                 int deleteAddcount = 0;
@@ -700,14 +788,14 @@ public class Notescreate : MonoBehaviour {
                 delete.Add(ClacBeat);
                 for (int e = ClacBeat; e < 48 + ClacBeat; e++)
                 {
-                    if (listsave[e].OPTION[0] != 0)
+                    if (listsave[e]. Option[0] != 0)
                     {
                         delete.Add(e);
                         deleteAddcount++;
                     } else {
                         for (int j = 0; j < 12; j++)
                         {
-                            if (listsave[e].NOTES[j ,0] != 0)
+                            if (listsave[e].NotesSet[j ,0] != 0)
                             {
                                 delete.Add(e);
                                 deleteAddcount++;
@@ -815,17 +903,18 @@ public class Notescreate : MonoBehaviour {
                 mea += measure[me];
                 for (int h = 0; h < measure[me + 1]; h++)
                 {
+                    print_array += "|";
                     for (int k = 0; k < 3; k++)
                     {
-                        print_array += listsave[h + mea].OPTION[k].ToString();
+                        print_array += listsave[h + mea]. Option[k].ToString();
                         if (k < 2) { print_array += ","; }
                     }
-                    print_array += "||";
+                    print_array += "|";
                     for (int i = 0; i < 12; i++)
                     {
                         for (int j = 0; j < 5; j++)
                         {
-                            print_array += listsave[h + mea].NOTES[i, j].ToString();
+                            print_array += listsave[h + mea].NotesSet[i, j].ToString();
                             if (j < 4) { print_array += ","; }
                         }
                         print_array += "|";
@@ -835,9 +924,10 @@ public class Notescreate : MonoBehaviour {
                 }
                 
             }
+            mea = 0;
 
-            
-           // finalle();
+
+            // finalle();
             //XMLWriter writer = GetComponent<XMLWriter>();
             if (writer!=null)
             {
@@ -850,12 +940,15 @@ public class Notescreate : MonoBehaviour {
                 Debug.Log(writer);
                 Debug.Log("writer is NULL");
             }
+
             Debug.Log(print_array);
-            listsave = new List<NotesStore>();
+            listsave = new List<Musicnote>();
             for(int meas = 0;meas < maxcc; meas++)
             {
                 measure[meas + 1] = 48;
             }
+
+            SceneManager.LoadScene("XMLReading");
         }
     }
 

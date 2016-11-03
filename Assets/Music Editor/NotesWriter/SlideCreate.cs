@@ -3,8 +3,7 @@ using System.Collections;
 
 public class SlideCreate : MonoBehaviour
 {
-    //これ全部コピペ
-    private float mag = 0;
+
     Mesh _mesh;
     private MeshFilter _meshFilter;
     private Vector3[] _newVertices;
@@ -15,9 +14,8 @@ public class SlideCreate : MonoBehaviour
         _meshFilter = GetComponent<MeshFilter>();
     }
 
-    public void Slider(float x,float y)
+    public void Slider(float x,float y ,float mag)
     {
-        mag = Notescreate.getmag();
         _mesh = new Mesh();
         _newVertices = new Vector3[4];
         Vector2[] _newUV = new Vector2[4];

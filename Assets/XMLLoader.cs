@@ -38,17 +38,16 @@ public class XMLLoader : MonoBehaviour
     static MusicData LoadedData;
     // Use this for initialization
     public InputField addr;
-
+    public int errnum;
             
     public void OpenXml()
     {
 
         EditFile = @addr.text;
         Debug.Log("inputfield addr is "+EditFile);
-        EditFile = @"D:\Music_Editor\Score\NightOfKnights.xml";//OpenFile.text;
 
-        Debug.Log(EditFile[0]);
-
+       // Debug.Log(EditFile[0]);
+         errnum = 0;
         FileStream fs = null;
         XmlReader xmlReader = null;
         XmlReaderSettings settings = null;
@@ -69,7 +68,7 @@ public class XMLLoader : MonoBehaviour
             {
                 XmlNodeType nType = xmlReader.NodeType;
                 //Debug.Log("NodeType: " + nType.ToString() + "\r\n");
-               // Debug.Log("LocalName: " + xmlReader.LocalName + "\r\n");
+                //Debug.Log("LocalName: " + xmlReader.LocalName + "\r\n");
                 //Debug.Log("Depth: " + Convert.ToString(xmlReader.Depth) + "\r\n");
                 //Debug.Log("Name: " + xmlReader.Name + "\r\n");
                 if (xmlReader.Name != "" && xmlReader != null && nType == XmlNodeType.Element)
@@ -147,7 +146,7 @@ public class XMLLoader : MonoBehaviour
         string[] divscore = { };
         var linecnt = score.ToList().Where(c => c.Equals('\n')).Count() ;//kopipe
         Debug.Log(linecnt);
-        StreamWriter log1 = new StreamWriter(@"D:\Music_Editor\log1.txt", true);
+        StreamWriter log = new StreamWriter(Directory.GetCurrentDirectory() +@"\1og.txt", true);
         int b = 0;
         divscore = score.Split('\n');
         for (int c = 0; c < linecnt; c++) { 
@@ -158,6 +157,7 @@ public class XMLLoader : MonoBehaviour
                     b++;
                 }
         }
+        
 
         for (; i < linecnt; i++)
         {
@@ -169,6 +169,33 @@ public class XMLLoader : MonoBehaviour
                 int intrvl = n - m;
                 switch (intrvl)
                 {
+                    case 4:
+                        for (; m < n; m++)
+                        {
+                            if (m != n - 1)
+                            {
+                                for (int k = 0; k < 11; k++)
+                                {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len - 1, pad);
+                                    //Debug.Log("divscore[m] is" + divscore[m]);
+                                    //score = string.Join("", divscore[m]);
+                                }
+
+                                //log.WriteLine(divscore[m]);
+                            }
+                            else
+                            {
+                                for (int k = 0; k < 11; k++)
+                                {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len - 1, pad);
+                                }
+                                //log.WriteLine(divscore[m]);
+                            }
+
+                        }
+                        break;
                     case 8:
                         for (; m < n; m++)
                         {
@@ -193,6 +220,33 @@ public class XMLLoader : MonoBehaviour
                                 //log.WriteLine(divscore[m]);
                             }
                             
+                        }
+                        break;
+                    case 12:
+                        for (; m < n; m++)
+                        {
+                            if (m != n - 1)
+                            {
+                                for (int k = 0; k < 3; k++)
+                                {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len - 1, pad);
+                                    //Debug.Log("divscore[m] is" + divscore[m]);
+                                    //score = string.Join("", divscore[m]);
+                                }
+
+                                //log.WriteLine(divscore[m]);
+                            }
+                            else
+                            {
+                                for (int k = 0; k < 3; k++)
+                                {
+                                    int len = divscore[m].Length;
+                                    divscore[m] = divscore[m].Insert(len - 1, pad);
+                                }
+                                //log.WriteLine(divscore[m]);
+                            }
+
                         }
                         break;
                     case 16:
@@ -225,11 +279,12 @@ public class XMLLoader : MonoBehaviour
             }
             
         }
+        
         //string padednotes = string.Join("\n", divscore);
         StringBuilder padednotes = new StringBuilder( string.Join("\n", divscore) );
         send = padednotes.ToString();
-        
         Debug.Log(send);
+        log.WriteLine(send);
         this.GetComponent<GlobalValue>().AnalyzingNotes(send);
         Debug.Log("Analyzed");
         foreach (char c in rmsymbl)
@@ -237,15 +292,15 @@ public class XMLLoader : MonoBehaviour
              padednotes = padednotes.Replace(c.ToString(), "");
 
          }
-        log1.WriteLine(padednotes);
+        //log.WriteLine(padednotes);
         /*foreach (string s in padednotes)
         {
             log.WriteLine(s);
         }*/
 
         
-        log1.Flush();
-        log1.Close();
+        log.Flush();
+        log.Close();
 
     }
 
